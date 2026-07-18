@@ -1,0 +1,1870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Your Account — ASPIRE Study</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="has-global-header has-global-footer">
+  <header class="global-header" role="banner">
+    <a class="gh-brand" href="index.html" aria-label="ASPIRE — back to hub">
+      <span class="logo" aria-hidden="true">A</span>
+      <span class="gh-brand-text">
+        ASPIRE
+        <small>Password Resilience Study</small>
+      </span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="registration.html" class="active" aria-current="page">ASPIRE</a>
+      <a href="sign.html">Sign In</a>
+      <a href="portal.html">Analytics Portal</a>
+      <a href="records.html">Data Records</a>
+    </nav>
+    <div class="nav-actions">
+      <input class="mobile-nav-toggle" id="mobile-nav-toggle-registration" type="checkbox" />
+      <label class="mobile-nav-trigger" for="mobile-nav-toggle-registration" aria-label="Toggle navigation menu">
+        <span aria-hidden="true"></span>
+      </label>
+      <label class="mobile-nav-backdrop" for="mobile-nav-toggle-registration" aria-hidden="true"></label>
+      <nav class="mobile-nav-drawer" aria-label="Primary">
+        <label class="mobile-nav-close" for="mobile-nav-toggle-registration" aria-label="Close navigation">×</label>
+        <a href="index.html">Home</a>
+        <a href="registration.html" class="active" aria-current="page">ASPIRE</a>
+        <a href="sign.html">Sign In</a>
+        <a href="portal.html">Analytics Portal</a>
+        <a href="records.html">Data Records</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="form-title">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">A</div>
+        <span>ASPIRE Study Portal</span>
+      </div>
+
+      <h1 id="form-title">Create your student account</h1>
+      <p class="subtitle">
+        This is part of an academic study on password habits. Your input is recorded anonymously for research.
+      </p>
+
+      <form id="signupForm" novalidate autocomplete="off">
+        <!-- =====================================================
+             CREDENTIALS — anonymous study form
+             Only the username and password remain visible so the
+             experience stays aligned with the privacy disclaimer.
+             ===================================================== -->
+        <div class="field">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" autocomplete="username" autofocus />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="new-password"
+              aria-describedby="helper-text"
+              required
+            />
+            <button
+              type="button"
+              class="toggle-visibility"
+              id="toggleVisibility"
+              aria-label="Show password"
+              aria-pressed="false"
+            >
+              <span aria-hidden="true">👁</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- =====================================================
+             TELEMETRY CHAMBER — hidden until password interaction.
+             Analytical engine opens in its own independent block.
+             ===================================================== -->
+        <div class="telemetry-chamber" aria-live="polite" aria-atomic="false">
+          <div class="telemetry" aria-live="polite" aria-atomic="false">
+
+          <!-- §3 -- Basic Properties -->
+          <div class="telemetry-section telemetry-basic" data-section="basic" data-open="false">
+            <h4>Basic properties</h4>
+
+            <div class="telemetry-basic-grid">
+              <div class="telemetry-basic-left">
+                <div class="telemetry-row">
+                  <div class="telemetry-metric">
+                    <span>Strength rating</span>
+                    <span class="v" id="tlmStrength">—</span>
+                  </div>
+                  <div class="telemetry-track" id="tlmStrengthBar"><div class="fill"></div></div>
+                </div>
+
+                <div class="telemetry-row">
+                  <div class="telemetry-metric">
+                    <span>String length</span>
+                    <span class="v" id="tlmLength">0</span>
+                  </div>
+                  <div class="telemetry-track length" id="tlmLengthBar"><div class="fill"></div></div>
+                </div>
+              </div>
+
+              <div class="telemetry-basic-right">
+                <div class="telemetry-row">
+                  <div class="telemetry-metric">
+                    <span>Information entropy</span>
+                    <span class="v" id="tlmEntropy">0.00 bits</span>
+                  </div>
+                  <div class="telemetry-track" id="tlmEntropyBar"><div class="fill"></div></div>
+                </div>
+
+                <div class="diversity" id="tlmDiversity" aria-label="Character class presence">
+                  <span class="pill" data-key="lower"><span class="dot"></span>a–z</span>
+                  <span class="pill" data-key="upper"><span class="dot"></span>A–Z</span>
+                  <span class="pill" data-key="digit"><span class="dot"></span>0–9</span>
+                  <span class="pill" data-key="special"><span class="dot"></span>!@#</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- §4 -- Conditional Warning Engine -->
+          <div class="telemetry-section telemetry-alerts" data-section="alerts" data-open="false">
+            <h4>Conditional alerts</h4>
+
+            <!-- =====================================================
+                 COMPROMISED CREDENTIAL TRACKER
+                 Have I Been Pwned (HIBP) k-Anonymity Module
+                 -----------------------------------------------------
+                 Sits at the very top of the Conditional Alerts
+                 container because a compromised password overrides
+                 every other structural strength.  It acts as the
+                 primary gatekeeper before the user even looks at
+                 character diversity or brute-force timelines.
+
+                 The plain text is NEVER sent to the network.  The
+                 client computes the SHA-1 locally, transmits only
+                 the first 5 hex characters, and matches the full
+                 hash against the returned suffix list in-browser.
+                 ===================================================== -->
+            <div class="breach" id="tlmBreach" data-state="idle" role="status" aria-live="polite">
+              <span class="breach-icon" aria-hidden="true">
+                <!-- Emerald shield used in the secure state.  The
+                     compromised state replaces it via CSS ::before
+                     so the swap is a single class change. -->
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <path d="M12 2 L4 5 V11 C4 16 8 20 12 22 C16 20 20 16 20 11 V5 Z"/>
+                  <path d="M9 12 L11 14 L15 10"/>
+                </svg>
+              </span>
+              <div class="breach-body">
+                <div class="breach-headline" id="tlmBreachHeadline">
+                  Awaiting password input
+                </div>
+                <div class="breach-sub" id="tlmBreachSub">
+                  Checking a global breach database for known exposures.
+                </div>
+              </div>
+            </div>
+
+            <!-- Pattern-scanner warnings stay below the breach module
+                 so the eye is led through the gatekeeper first. -->
+            <div class="warnings" id="tlmWarnings" role="status">
+              <ul id="tlmWarningList"></ul>
+            </div>
+          </div>
+
+          <!-- §5 -- Cyber Attack Simulation -->
+          <div class="telemetry-simulation" data-open="false">
+            <h4>Cyber attack simulation</h4>
+            <div class="telemetry-simulation-grid">
+              <div class="telemetry-simulation-column">
+                <div class="threats">
+                  <div class="threat-group">
+                    <div class="group-title">Brute force attack <small>raw combinations ÷ throughput</small></div>
+                    <div class="threat-row">
+                      <span class="name">Desktop PC</span>
+                      <div class="threat-track"><div class="fill" id="tlmBfDesktopFill"></div></div>
+                      <span class="time" id="tlmBfDesktopTime">—</span>
+                    </div>
+                    <div class="threat-row">
+                      <span class="name">Discrete GPU</span>
+                      <div class="threat-track"><div class="fill" id="tlmBfGpuFill"></div></div>
+                      <span class="time" id="tlmBfGpuTime">—</span>
+                    </div>
+                    <div class="threat-row">
+                      <span class="name">GPU farm cluster</span>
+                      <div class="threat-track"><div class="fill" id="tlmBfFarmFill"></div></div>
+                      <span class="time" id="tlmBfFarmTime">—</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="telemetry-simulation-column">
+                <div class="threats">
+                  <div class="threat-group">
+                    <div class="group-title">Optimized dictionary attack <small>search space ÷ 10⁴</small></div>
+                    <div class="threat-row">
+                      <span class="name">Desktop PC</span>
+                      <div class="threat-track"><div class="fill" id="tlmOaDesktopFill"></div></div>
+                      <span class="time" id="tlmOaDesktopTime">—</span>
+                    </div>
+                    <div class="threat-row">
+                      <span class="name">Discrete GPU</span>
+                      <div class="threat-track"><div class="fill" id="tlmOaGpuFill"></div></div>
+                      <span class="time" id="tlmOaGpuTime">—</span>
+                    </div>
+                    <div class="threat-row">
+                      <span class="name">GPU farm cluster</span>
+                      <div class="threat-track"><div class="fill" id="tlmOaFarmFill"></div></div>
+                      <span class="time" id="tlmOaFarmTime">—</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- =====================================================
+             CHECKLIST + HELPER + SUBMIT — static flow
+             These elements follow the telemetry chamber in
+             normal document flow.  Nothing is pinned, nothing
+             is sticky.  The page itself scrolls when needed.
+             ===================================================== -->
+        <div class="validation-panel">
+          <!-- Checklist -->
+          <ul class="checklist" id="checklist" aria-label="Password requirements">
+          <li data-rule="length"><span class="icon" aria-hidden="true">·</span> 12+ characters</li>
+          <li data-rule="upper"><span class="icon" aria-hidden="true">·</span> Uppercase letter</li>
+          <li data-rule="lower"><span class="icon" aria-hidden="true">·</span> Lowercase letter</li>
+          <li data-rule="number"><span class="icon" aria-hidden="true">·</span> A number</li>
+          <li data-rule="special"><span class="icon" aria-hidden="true">·</span> Special character</li>
+          <li data-rule="sequence"><span class="icon" aria-hidden="true">·</span> No sequences</li>
+        </ul>
+
+        <!-- Helper text -->
+        <div class="helper" id="helper-text" role="status" aria-live="polite">
+          Start typing to see feedback.
+        </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn" disabled>
+            Create account
+          </button>
+
+          <p class="footnote">
+            By continuing, you consent to participate in this anonymous password research study.
+          </p>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- =====================================================
+       INTERVENTION MODAL
+       The "friction point" — appears when the user tries to
+       submit a vulnerable password and forces an active choice.
+       ===================================================== -->
+  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true"
+       aria-labelledby="modal-title" aria-describedby="modal-desc">
+    <div class="modal">
+      <h2 id="modal-title">
+        <span class="warn-icon" aria-hidden="true">!</span>
+        <span id="modalTitleText">This password is at risk</span>
+      </h2>
+      <p id="modal-desc">
+        Your password would be vulnerable to common attacks. We strongly recommend using one of
+        the strong alternatives below — they were generated locally and never leave your browser.
+      </p>
+
+      <div class="suggestions">
+        <h3>Suggested strong passwords</h3>
+        <ul class="suggestion-list" id="suggestionList"></ul>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="modalProceed">
+          I understand the risk — use this password anyway
+        </button>
+        <button type="button" class="btn-primary" id="modalImprove">
+          Improve my password
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <footer class="global-footer" role="contentinfo">
+    <div class="gf-inner">
+      <span class="gf-block gf-left">&copy; 2026 ASPIRE. All rights reserved.</span>
+      <span class="gf-block gf-center">Advanced Student Password Interaction and Resilience Evaluator Academic Research Study</span>
+      <span class="gf-block gf-right">Data collected anonymously for behavioral analysis.</span>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ===========================================================
+    // UTILITIES
+    // ===========================================================
+    function debounce(fn, wait) {
+      let timerId = null;
+      return function debounced(...args) {
+        clearTimeout(timerId);
+        timerId = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+
+    // ===========================================================
+    // CONFIG
+    // ===========================================================
+    const STORAGE_KEY     = 'aspire_submissions';
+    const RESILIENCE_KEY  = 'aspire_resilience';
+    const TIERS = ['weak', 'fair', 'good', 'strong'];
+
+    const COMMON_PASSWORDS = new Set([
+      'password', 'password1', 'password123', '12345678', '123456789',
+      'qwerty', 'qwerty123', 'letmein', 'welcome', 'admin', 'iloveyou',
+      'princess', 'monkey', 'dragon', 'sunshine', 'master', 'football',
+      'shadow', 'ashley', 'bailey', 'passw0rd', 'abc123', '111111',
+      '000000', '654321', 'superman', 'batman'
+    ]);
+
+    // ===========================================================
+    // COMPROMISED CREDENTIAL TRACKER — HIBP k-Anonymity Engine
+    //   • The plain text is NEVER sent over the network.
+    //   • The client computes the SHA-1 hash locally and sends
+    //     only the first 5 hex characters to the range API.
+    //   • The full hash is matched against the returned suffix
+    //     list entirely in-browser.
+    //   • If the API is unreachable (CORS, offline, blocked), the
+    //     system falls back to the local COMMON_PASSWORDS set so
+    //     the user still receives actionable feedback.
+    // ===========================================================
+    const HIBP_RANGE_API = 'https://api.pwnedpasswords.com/range/';
+
+    // Pure-JS SHA-1 (RFC 3174).  SubtleCrypto is unavailable
+    // when the page is served from file://, so we ship a fallback
+    // implementation that is fast enough for a 1–100 char input.
+    function sha1Hex(input) {
+      // ---- SubtleCrypto path (preferred, secure contexts) ----
+      if (typeof crypto !== 'undefined' && crypto.subtle) {
+        return crypto.subtle.digest('SHA-1', new TextEncoder().encode(input))
+          .then(buf => Array.from(new Uint8Array(buf))
+            .map(b => b.toString(16).padStart(2, '0')).join('')
+            .toUpperCase());
+      }
+      // ---- Fallback path (file://, no subtle) ----------------
+      return Promise.resolve(sha1Fallback(input));
+    }
+    function sha1Fallback(msg) {
+      // Convert to UTF-8 bytes manually
+      const utf8 = unescape(encodeURIComponent(msg));
+      const bytes = new Array(utf8.length);
+      for (let i = 0; i < utf8.length; i++) bytes[i] = utf8.charCodeAt(i);
+
+      // Pre-processing: append 0x80, pad to 64-byte block
+      const ml = bytes.length * 8;
+      bytes.push(0x80);
+      while (bytes.length % 64 !== 56) bytes.push(0);
+      for (let i = 7; i >= 0; i--) bytes.push((ml >>> (i * 8)) & 0xff);
+
+      let h0 = 0x67452301, h1 = 0xEFCDAB89, h2 = 0x98BADCFE,
+          h3 = 0x10325476, h4 = 0xC3D2E1F0;
+
+      for (let chunk = 0; chunk < bytes.length; chunk += 64) {
+        const w = new Array(80);
+        for (let i = 0; i < 16; i++) {
+          w[i] = (bytes[chunk + i*4]     << 24) |
+                 (bytes[chunk + i*4 + 1] << 16) |
+                 (bytes[chunk + i*4 + 2] << 8)  |
+                 (bytes[chunk + i*4 + 3]);
+        }
+        for (let i = 16; i < 80; i++) {
+          const v = w[i-3] ^ w[i-8] ^ w[i-14] ^ w[i-16];
+          w[i] = (v << 1) | (v >>> 31);
+        }
+        let a = h0, b = h1, c = h2, d = h3, e = h4;
+        for (let i = 0; i < 80; i++) {
+          let f, k;
+          if (i < 20)      { f = (b & c) | ((~b) & d);        k = 0x5A827999; }
+          else if (i < 40) { f = b ^ c ^ d;                   k = 0x6ED9EBA1; }
+          else if (i < 60) { f = (b & c) | (b & d) | (c & d); k = 0x8F1BBCDC; }
+          else             { f = b ^ c ^ d;                   k = 0xCA62C1D6; }
+          const t = ((a << 5) | (a >>> 27)) + f + e + k + w[i];
+          e = d; d = c; c = (b << 30) | (b >>> 2); b = a; a = t;
+        }
+        h0 = (h0 + a) | 0; h1 = (h1 + b) | 0; h2 = (h2 + c) | 0;
+        h3 = (h3 + d) | 0; h4 = (h4 + e) | 0;
+      }
+      return [h0, h1, h2, h3, h4]
+        .map(v => (v >>> 0).toString(16).padStart(8, '0'))
+        .join('').toUpperCase();
+    }
+
+    // Look up the breach count for a given plain password using
+    // the k-anonymity range API.  Returns the integer count, or
+    // `null` if the API failed (the caller falls back to the
+    // local common-passwords set in that case).
+    async function hibpLookupCount(password) {
+      const hash = await sha1Hex(password);
+      const prefix = hash.slice(0, 5);
+      const suffix = hash.slice(5).toUpperCase();
+      const res = await fetch(HIBP_RANGE_API + prefix, {
+        method: 'GET',
+        // Add the breach-verification header recommended by HIBP.
+        headers: { 'Add-Padding': 'true' }
+      });
+      if (!res.ok) return null;
+      const text = await res.text();
+      // HIBP returns one record per line:  "<SUFFIX>:<COUNT>"
+      // (When Add-Padding is set, ~800 random padding lines are
+      //  appended to obfuscate the real lookup; we still ignore
+      //  non-matching suffixes exactly the same way.)
+      for (const line of text.split('\n')) {
+        const [s, c] = line.trim().split(':');
+        if (s && s.toUpperCase() === suffix) {
+          const n = parseInt(c, 10);
+          return isNaN(n) ? null : n;
+        }
+      }
+      return 0;  // hash prefix matched but suffix did not — clean
+    }
+
+    const SEQUENCES = [
+      'abcdefghijklmnopqrstuvwxyz',
+      '0123456789',
+      'qwertyuiop',
+      'asdfghjkl',
+      'zxcvbnm'
+    ];
+
+    // ===========================================================
+    // TELEMETRY MATH ENGINE
+    //   -- Character pools for Shannon entropy base R
+    //   -- Hardware throughput constants (hashes/sec)
+    //   -- Optimized-attack divisor (dictionary reduction factor)
+    // ===========================================================
+    const TLM_POOLS = [
+      { key: 'lower',   size: 26, test: p => /[a-z]/.test(p) },
+      { key: 'upper',   size: 26, test: p => /[A-Z]/.test(p) },
+      { key: 'digit',   size: 10, test: p => /[0-9]/.test(p) },
+      { key: 'special', size: 33, test: p => /[!@#$%^&*()_+\-=\[\]{}|;':",./<>?]/.test(p) }
+    ];
+    const TLM_HARDWARE = {
+      desktop: 1e9,   // 1 billion hashes/sec
+      gpu:     1e12,  // 1 trillion
+      farm:    1e15   // 1 quadrillion
+    };
+    const TLM_OPT_DIVISOR = 1e4;   // optimized attacks reduce search space 10⁴×
+
+    function tlmEntropy(password) {
+      const present = TLM_POOLS.filter(p => p.test(password));
+      const R = present.reduce((s, p) => s + p.size, 0);
+      const L = password.length;
+      return {
+        L, R,
+        entropy: (L > 0 && R > 1) ? L * Math.log(R) / Math.LN2 : 0,
+        present
+      };
+    }
+
+    // ===========================================================
+    // TIER MAP (100-Point Matrix)
+    //   0–35   Weak        (crimson)
+    //   36–65  Fair        (amber)
+    //   66–85  Good        (mint)
+    //   86–99  Strong      (green)
+    //   100+   Very Strong (cyan / deep-green with active glow)
+    // ===========================================================
+    function tlmTier(scoreOrEntropy) {
+      if (scoreOrEntropy < 36)  return { tier: 'weak',  label: 'Weak' };
+      if (scoreOrEntropy < 66)  return { tier: 'fair',  label: 'Fair' };
+      if (scoreOrEntropy < 86)  return { tier: 'good',  label: 'Good' };
+      if (scoreOrEntropy < 100) return { tier: 'strong', label: 'Strong' };
+      return                      { tier: 'ultra', label: 'Very Strong' };
+    }
+
+    // ===========================================================
+    // PATTERN SCANNER (per §3 of the v2.0 brief)
+    //   Returns an array of penalties to apply to the 100-pt score
+    //   and an array of human-readable warnings for the alert panel.
+    // ===========================================================
+    const PATTERNS = {
+      // Sequential ascending or descending runs of 4+ chars/numbers
+      sequence: (pw) => {
+        const seqs = [
+          'abcdefghijklmnopqrstuvwxyz',
+          '0123456789',
+          'qwertyuiop',
+          'asdfghjkl',
+          'zxcvbnm'
+        ];
+        const lower = pw.toLowerCase();
+        for (const seq of seqs) {
+          for (let i = 0; i + 4 <= seq.length; i++) {
+            const sub = seq.substring(i, i + 4);
+            if (lower.includes(sub) || lower.includes(sub.split('').reverse().join(''))) {
+              return true;
+            }
+          }
+        }
+        return false;
+      },
+
+      // Keyboard layout rows
+      keyboard: (pw) => {
+        const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm', '1234567890'];
+        const lower = pw.toLowerCase();
+        return rows.some(r =>
+          lower.includes(r.substring(0, 4)) ||
+          lower.includes(r.substring(0, 5)) ||
+          lower.includes(r.split('').reverse().join('').substring(0, 4))
+        );
+      },
+
+      // Repeated character blocks (3+ identical in a row)
+      repetition: (pw) => /(.)\1{2,}/.test(pw),
+
+      // Repeated two-character blocks ("abab", "1212")
+      blockRepeat: (pw) => {
+        for (let i = 0; i + 4 <= pw.length; i++) {
+          const a = pw.substring(i, i + 2);
+          if (pw.substring(i + 2, i + 4) === a) return true;
+        }
+        return false;
+      },
+
+      // Leet / predictable substitutions.  We only flag this when the
+      // password is *primarily* leet-encoded (most vowels replaced
+      // with symbols/digits).  A single @ or ! inside a normal
+      // mixed password is fine.
+      leetSubstitution: (pw) => {
+        if (pw.length < 6) return false;
+        const lower = pw.toLowerCase();
+        const vowelish = (lower.match(/[aeiou]/g) || []).length;
+        const leetish  = (lower.match(/[@!30\$]/g) || []).length;
+        // More leet tokens than vowel tokens ⇒ predictable
+        return leetish >= 3 && leetish > vowelish;
+      },
+
+      // Recognisable year patterns (1900-2099)
+      yearPattern: (pw) => /\b(19[0-9]{2}|20[0-9]{2})\b/.test(pw),
+
+      // Lazy symbol placement — single symbol appended/prepended
+      // at the boundary of an otherwise alphanumeric body.
+      lazySymbol: (pw) => {
+        if (pw.length < 6) return false;
+        const symEdge = (s) => /^[^!@#$%^&*()_+\-=\[\]{}|;':",./<>?]*[!@#$%^&*()_+\-=\[\]{}|;':",./<>?]$/.test(s)
+                        || /^[!@#$%^&*()_+\-=\[\]{}|;':",./<>?][^!@#$%^&*()_+\-=\[\]{}|;':",./<>?]*$/.test(s);
+        const symCount = (pw.match(/[!@#$%^&*()_+\-=\[\]{}|;':",./<>?]/g) || []).length;
+        return symCount === 1 && symEdge(pw);
+      }
+    };
+
+    function scanPatterns(pw) {
+      const warnings = [];
+      const penalties = [];          // each entry: { key, multiplier }
+
+      if (!pw) return { warnings, penalties };
+
+      // Sequence penalty — 80%
+      if (PATTERNS.sequence(pw)) {
+        penalties.push({ key: 'sequence', multiplier: 0.80 });
+        warnings.push('Sequential characters detected (e.g. abc, 123, qwerty).');
+      }
+      // Keyboard layout penalty — 70%
+      if (PATTERNS.keyboard(pw)) {
+        penalties.push({ key: 'keyboard', multiplier: 0.70 });
+        warnings.push('Keyboard layout pattern detected (e.g. qwerty, asdf).');
+      }
+      // Repetition penalty — 90%
+      if (PATTERNS.repetition(pw) || PATTERNS.blockRepeat(pw)) {
+        penalties.push({ key: 'repetition', multiplier: 0.90 });
+        warnings.push('Repeated characters or blocks detected (e.g. aaa, abab).');
+      }
+      // Year / date context
+      if (PATTERNS.yearPattern(pw)) {
+        penalties.push({ key: 'year', multiplier: 0.85 });
+        warnings.push('Recognisable year/date pattern detected (e.g. 1990, 2023).');
+      }
+      // Predictable leet substitution
+      if (PATTERNS.leetSubstitution(pw)) {
+        penalties.push({ key: 'leet', multiplier: 0.90 });
+        warnings.push('Predictable leet substitutions detected (e.g. @ for a, 1 for i).');
+      }
+      // Lazy symbol placement
+      if (PATTERNS.lazySymbol(pw)) {
+        penalties.push({ key: 'lazySymbol', multiplier: 0.90 });
+        warnings.push('Special character is only placed at the boundary — integrate symbols randomly.');
+      }
+
+      return { warnings, penalties };
+    }
+
+    function tlmCrackTime(password, hw, optimized) {
+      if (!password) return { seconds: 0, fraction: 0 };
+      const { R, L } = tlmEntropy(password);
+      if (R <= 1 || L === 0) return { seconds: Infinity, fraction: 1 };
+
+      // The combination count R^L overflows Number for typical
+      // passwords (e.g. 95^14 ≈ 4.9e27 still fits; 95^20 ≈ 2.9e39
+      // does not).  We work in log-space so we never lose precision
+      // and never have to collapse to Infinity.
+      //
+      //   log10(combos) = L · log10(R)
+      //   log10(seconds) = log10(combos) − log10(divisor)
+      //   seconds        = 10 ^ log10(seconds)
+      //
+      // Even when the value itself exceeds Number.MAX_SAFE_INTEGER
+      // we can still format it meaningfully because the formatter
+      // reads magnitude, not absolute precision.
+
+      const divisor = optimized
+        ? TLM_HARDWARE[hw] * TLM_OPT_DIVISOR
+        : TLM_HARDWARE[hw];
+
+      const logCombos   = L * Math.log10(R);              // log10(R^L)
+      const logDivisor  = Math.log10(divisor);
+      const logSeconds  = logCombos - logDivisor;
+
+      // When logSeconds is comfortably finite we return the actual
+      // value.  Beyond ~1e308 the formatter shows "∞ years"; the
+      // magnitude here is far beyond any practical threat.
+      let seconds;
+      if (logSeconds > 308) {
+        // Use Number.MAX_VALUE × 10^k for visual magnitude — the
+        // formatter will scale it to quadrillion+ years.
+        seconds = Number.MAX_VALUE * Math.pow(10, logSeconds - 308);
+        if (!isFinite(seconds)) seconds = Infinity;
+      } else {
+        seconds = Math.pow(10, logSeconds);
+      }
+
+      // Log-scaled fill so any non-zero crack time reads as > 0
+      const fraction = seconds === 0 ? 0
+                     : !isFinite(seconds) ? 1
+                     : Math.min(1, Math.max(0, logSeconds) / 30);
+      return { seconds, fraction };
+    }
+
+    // ===========================================================
+    // TIME FORMATTER (per the v2.1 brief)
+    //   Sub-year durations are formatted with the conventional unit
+    //   (seconds, minutes, hours, days, months, years).
+    //
+    //   Beyond one year the formatter locks the suffix to "years"
+    //   and uses a numerically-scaled prefix so the user always
+    //   sees an exact, comparable figure:
+    //
+    //     500 years
+    //     10 thousand years
+    //      3 million years
+    //     698 billion years
+    //     35 trillion years
+    //
+    //   Terms like "decades", "centuries", and "millennia" are
+    //   NEVER rendered — the suffix stays "years" and the scale
+    //   multiplier grows instead.  This gives a direct, unambiguous
+    //   measure of crack-time magnitude.
+    // ===========================================================
+    const SECONDS_PER_YEAR = 31536000;
+
+    function tlmFormatDuration(seconds) {
+      // --- Defensive bounds -----------------------------------
+      if (seconds === null || seconds === undefined) return '—';
+      if (seconds <= 0)        return '0 seconds';
+      if (!isFinite(seconds))  return '∞ years';
+
+      // --- Sub-year range -------------------------------------
+      const units = [
+        { s: 1,                       n: 'second' },
+        { s: 60,                      n: 'minute' },
+        { s: 3600,                    n: 'hour'   },
+        { s: 86400,                   n: 'day'    },
+        { s: 2592000,                 n: 'month'  },
+        { s: SECONDS_PER_YEAR,       n: 'year'   }
+      ];
+      if (seconds < SECONDS_PER_YEAR) {
+        let chosen = units[0];
+        for (const u of units) if (seconds >= u.s) chosen = u;
+        const value = seconds / chosen.s;
+        const formatted = value < 10 ? value.toFixed(2)
+                        : value < 100 ? value.toFixed(1)
+                        : Math.round(value).toLocaleString();
+        const label = Math.abs(value - 1) < 1e-9 ? chosen.n : chosen.n + 's';
+        return `${formatted} ${label}`;
+      }
+
+      // --- Year-and-beyond range -----------------------------
+      // The number of years can be enormous.  We round to TWO
+      // significant figures so the display stays readable
+      // (e.g. "698 billion years" rather than "698,491,283 years").
+      // Scale tiers are stepped at 10³ boundaries.
+      const years = seconds / SECONDS_PER_YEAR;
+
+      // Scale ladder — each entry's `v` is the lower bound in years.
+      const scales = [
+        { v: 1e15, label: 'quadrillion' },
+        { v: 1e12, label: 'trillion'    },
+        { v: 1e9,  label: 'billion'     },
+        { v: 1e6,  label: 'million'     },
+        { v: 1e3,  label: 'thousand'    },
+        { v: 0,    label: ''            }
+      ];
+      let chosen = scales[scales.length - 1];
+      for (const s of scales) if (years >= s.v) { chosen = s; break; }
+
+      let value, formatted;
+      if (chosen.v === 0) {
+        // Pure "years" with integer + 2-sig-fig rounding
+        value = years;
+        formatted = Math.round(value).toLocaleString();
+        return `${formatted} years`;
+      }
+
+      value = years / chosen.v;            // scaled to the chosen tier
+      // 2-significant-figure rounding
+      if (value >= 100) formatted = Math.round(value).toLocaleString();
+      else if (value >= 10) formatted = value.toFixed(1);
+      else formatted = value.toFixed(2);
+
+      const suffix = chosen.label ? `${chosen.label} years` : 'years';
+      return `${formatted} ${suffix}`;
+    }
+
+    // ===========================================================
+    // COMPROMISED CREDENTIAL TRACKER — render + query control
+    //   Three render modes:
+    //     idle         → no input yet
+    //     secure       → HIBP confirmed zero known exposures
+    //     compromised  → HIBP returned N > 0 known exposures
+    //   Plus a fourth, quieter state used when the network is
+    //   blocked — we still show the verdict, but the headline is
+    //   the local common-password list fallback.
+    // ===========================================================
+    const breachFmt = new Intl.NumberFormat('en-US');
+
+    function renderBreach() {
+      if (!elsBreach) return;
+      const { state, count } = breachResult;
+
+      elsBreach.dataset.state = state;
+
+      if (state === 'idle') {
+        elsBreachHeadline.textContent = 'Awaiting password input';
+        elsBreachSub.textContent = 'Checking a global breach database for known exposures.';
+        return;
+      }
+      if (state === 'secure') {
+        elsBreachHeadline.innerHTML =
+          '<span class="breach-icon-inline" aria-hidden="true">🛡</span> ' +
+          'Unique Password: 0 known data breaches';
+        elsBreachSub.textContent = 'This exact string has not been seen in any leak indexed by the global breach database.';
+        return;
+      }
+      if (state === 'compromised') {
+        const n = breachFmt.format(count || 0);
+        elsBreachHeadline.innerHTML =
+          'CRITICAL WARNING: Password exposed ' +
+          '<span class="breach-count">' + n + '</span>' +
+          ' times in known data breaches';
+        elsBreachSub.textContent =
+          'This exact string is public and highly vulnerable. ' +
+          'You must choose a completely different phrase.';
+        // Re-render the helper text so the override directive
+        // replaces the standard formatting advice immediately.
+        try {
+          const result = evaluate(input ? input.value : '');
+          if (typeof render === 'function') render(result);
+        } catch (_) { /* render not in scope yet during init */ }
+        return;
+      }
+      if (state === 'unknown') {
+        // Network failed but the password matched the local list
+        elsBreachHeadline.innerHTML =
+          '<span class="breach-icon-inline" aria-hidden="true">⚠</span> ' +
+          'This password appears on the local common-password list';
+        elsBreachSub.textContent = 'Live breach database is unreachable; verdict based on offline list only.';
+        return;
+      }
+    }
+
+    // Debounce so a single fast keystroke burst never fires
+    // multiple HIBP requests.  The debounce window is 350ms.
+    const breachQuery = debounce(async function (password) {
+      if (!password) {
+        breachResult = { password: null, count: null, state: 'idle', fetchedAt: Date.now() };
+        renderBreach();
+        return;
+      }
+
+      const seq = ++breachQuerySeq;     // capture this query's id
+
+      // Optimistic secure state while we wait — if the user
+      // continues typing, the stale response is discarded.
+      breachResult = { password, count: 0, state: 'secure', fetchedAt: Date.now() };
+      renderBreach();
+
+      // Short passwords can never be a real breach concern, but
+      // we still confirm with the API to keep the flow uniform.
+      let count = null;
+      try {
+        count = await hibpLookupCount(password);
+      } catch (_) {
+        count = null;
+      }
+      if (seq !== breachQuerySeq) return;   // stale response
+
+      if (count === null) {
+        // Network failure.  If the local list flags it, surface that
+        // as a quiet offline verdict.  Otherwise show the secure
+        // state with a "data unavailable" subline.
+        if (COMMON_PASSWORDS.has(password.toLowerCase())) {
+          breachResult = { password, count: null, state: 'unknown', fetchedAt: Date.now() };
+        } else {
+          breachResult = { password, count: null, state: 'secure', fetchedAt: Date.now() };
+          elsBreachSub.textContent = 'Live breach database unreachable; no offline match. Proceed with caution.';
+        }
+      } else if (count > 0) {
+        breachResult = { password, count, state: 'compromised', fetchedAt: Date.now() };
+      } else {
+        breachResult = { password, count: 0, state: 'secure', fetchedAt: Date.now() };
+      }
+      renderBreach();
+    }, 350);
+
+    // ===========================================================
+    // DOM REFERENCES
+    // ===========================================================
+    const form            = document.getElementById('signupForm');
+    const input           = document.getElementById('password');
+    const toggleBtn       = document.getElementById('toggleVisibility');
+    const checklistEl     = document.getElementById('checklist');
+    const helperText      = document.getElementById('helper-text');
+    const submitBtn       = document.getElementById('submitBtn');
+
+    // Telemetry suite (DOM bindings — note the `els` prefix so the
+    // math functions below (tlmEntropy, tlmTier, tlmCrackTime, ...)
+    // keep their own identifiers without a redeclaration collision).
+    const elsTlmStrength    = document.getElementById('tlmStrength');
+    const elsTlmStrengthBar = document.getElementById('tlmStrengthBar');
+    const elsTlmLength      = document.getElementById('tlmLength');
+    const elsTlmLengthBar   = document.getElementById('tlmLengthBar');
+    const elsTlmEntropy     = document.getElementById('tlmEntropy');
+    const elsTlmEntropyBar  = document.getElementById('tlmEntropyBar');
+    const elsTlmDiversity   = document.getElementById('tlmDiversity');
+    const elsTlmWarnings    = document.getElementById('tlmWarnings');
+    const elsTlmWarningList = document.getElementById('tlmWarningList');
+
+    // Compromise tracker DOM bindings
+    const elsBreach         = document.getElementById('tlmBreach');
+    const elsBreachHeadline = document.getElementById('tlmBreachHeadline');
+    const elsBreachSub      = document.getElementById('tlmBreachSub');
+
+    // The most recent HIBP result is cached so the render loop
+    // can use it for the helper-text override without re-querying.
+    let breachResult = {
+      password:  null,    // plain text that was looked up
+      count:     null,    // integer hits, or null = unknown
+      state:     'idle',  // 'idle' | 'secure' | 'compromised' | 'unknown'
+      fetchedAt: 0
+    };
+    // Sequence number used to discard stale fetches when the user
+    // is typing faster than the network can respond.
+    let breachQuerySeq = 0;
+
+    const TLM = {
+      bf: {
+        desktop: { time: document.getElementById('tlmBfDesktopTime'), fill: document.getElementById('tlmBfDesktopFill') },
+        gpu:     { time: document.getElementById('tlmBfGpuTime'),     fill: document.getElementById('tlmBfGpuFill')     },
+        farm:    { time: document.getElementById('tlmBfFarmTime'),    fill: document.getElementById('tlmBfFarmFill')    }
+      },
+      oa: {
+        desktop: { time: document.getElementById('tlmOaDesktopTime'), fill: document.getElementById('tlmOaDesktopFill') },
+        gpu:     { time: document.getElementById('tlmOaGpuTime'),     fill: document.getElementById('tlmOaGpuFill')     },
+        farm:    { time: document.getElementById('tlmOaFarmTime'),    fill: document.getElementById('tlmOaFarmFill')    }
+      }
+    };
+
+    const modal           = document.getElementById('modal');
+    const modalProceed    = document.getElementById('modalProceed');
+    const modalImprove    = document.getElementById('modalImprove');
+    const modalTitleText  = document.getElementById('modalTitleText');
+    const suggestionList  = document.getElementById('suggestionList');
+    const toast           = document.getElementById('toast');
+
+    // ===========================================================
+    // TELEMETRY STATE (Active Behavioral Telemetry)
+    // ===========================================================
+    const telemetry = {
+      startedAt: null,       // timestamp of first keystroke
+      finishedAt: null,      // timestamp of final submit
+      keypressCount: 0,      // total keys pressed in the password field
+      backspaceCount: 0,     // correction metric
+      firstKey: null,
+      lastPassword: '',
+      finalTier: 'weak'
+    };
+
+    function startTelemetry() {
+      if (telemetry.startedAt !== null) return;
+      telemetry.startedAt = performance.now();
+      telemetry.firstKey = input.value ? input.value[0] : null;
+    }
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace') {
+        telemetry.backspaceCount++;
+        if (modal.classList.contains('open')) telemetry.hesitationBackspaces++;
+      }
+      if (e.key.length === 1) {
+        telemetry.keypressCount++;
+        startTelemetry();
+        // Resilience Delta: track post-intervention deliberation in
+        // the same field (the user may keep editing while the modal
+        // is open in another tab, or after dismissing it once).
+        if (telemetry.hesitationStartedAt) telemetry.hesitationKeypresses++;
+      }
+    });
+
+    // ===========================================================
+    // EVALUATION ENGINE (v2.0 — 100-Point Weighted Matrix)
+    //
+    //   The score is the SUM of four pillars, each capped at 25:
+    //     • Length        (30% of 100 → 30 pts)
+    //     • Diversity     (25% of 100 → 25 pts)
+    //     • Pattern Free  (25% of 100 → 25 pts)
+    //     • Entropy       (20% of 100 → 20 pts)
+    //
+    //   Penalties are applied by SCALING the final score by the
+    //   weakest (most severe) detected penalty multiplier:
+    //     sequence     → ×0.80
+    //     keyboard     → ×0.70
+    //     repetition   → ×0.90
+    //     year         → ×0.85
+    //     leet         → ×0.90
+    //     lazySymbol   → ×0.90
+    //
+    //   Final score is clamped to 0–110 (tiers above 100 are
+    //   "Very Strong").
+    // ===========================================================
+    const SCORE_WEIGHTS = {
+      length:    30,   // max 30 pts
+      diversity: 25,   // max 25 pts
+      pattern:   25,   // max 25 pts
+      entropy:   20    // max 20 pts
+    };
+
+    function scoreLength(L) {
+      // 12-char baseline.  Each char above 8 earns incremental pts.
+      // <8 → 0 pts; 8–11 → 5 pts; 12–15 → 20 pts; 16–20 → 28 pts; ≥21 → 30 pts.
+      if (L < 8)  return 0;
+      if (L <= 11) return 5;
+      if (L <= 15) return 20;
+      if (L <= 20) return 28;
+      return 30;
+    }
+
+    function scoreDiversity(presentCount) {
+      // 1 pool = 0, 2 pools = 12, 3 pools = 20, 4 pools = 25
+      if (presentCount <= 1) return 0;
+      if (presentCount === 2) return 12;
+      if (presentCount === 3) return 20;
+      return 25;
+    }
+
+    function scorePattern(pw, scan) {
+      // Start at 25, subtract by detected weakness.
+      // Each detected pattern cuts 8 pts (clamped at 0).
+      let pts = 25;
+      pts -= scan.penalties.length * 8;
+      return Math.max(0, pts);
+    }
+
+    function scoreEntropy(entropy) {
+      // 80-bit threshold = green gate per brief.
+      // <40 → 0; 40–59 → 8; 60–79 → 14; ≥80 → 20.
+      if (entropy < 40) return 0;
+      if (entropy < 60) return 8;
+      if (entropy < 80) return 14;
+      return 20;
+    }
+
+    function evaluate(password) {
+      const passed = {
+        length:   false,
+        upper:    false,
+        lower:    false,
+        number:   false,
+        special:  false,
+        sequence: true
+      };
+      const suggestions = [];
+
+      if (!password) {
+        return {
+          score: 0, tier: 'weak', passed, suggestions: ['Start typing to see feedback.'],
+          isCommon: false, breakdown: { length: 0, diversity: 0, pattern: 0, entropy: 0 },
+          penalties: [], warnings: [], entropy: 0
+        };
+      }
+
+      // ----- Pillar presence (used by checklist + diversity scoring) -----
+      passed.length  = password.length >= 12;          // 12-char baseline
+      passed.upper   = /[A-Z]/.test(password);
+      passed.lower   = /[a-z]/.test(password);
+      passed.number  = /[0-9]/.test(password);
+      passed.special = /[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\;'/`~]/.test(password);
+
+      const present = TLM_POOLS.filter(p => p.test(password));
+      passed.sequence = present.length >= 3 && !scanPatterns(password).penalties
+                          .some(p => p.key === 'sequence');
+
+      const isCommon = COMMON_PASSWORDS.has(password.toLowerCase());
+
+      // ----- Pattern scan (§3) -----
+      const scan = scanPatterns(password);
+
+      // ----- Personalized info check -----
+      const lower = password.toLowerCase();
+      const username  = (document.getElementById('username').value || '').trim().toLowerCase();
+      const personalTokens = [username].filter(t => t.length >= 3);
+      const isPersonal = personalTokens.length > 0
+                          && personalTokens.some(t => lower.includes(t));
+
+      // ----- Entropy -----
+      const { entropy } = tlmEntropy(password);
+
+      // ----- 100-point matrix -----
+      const L = password.length;
+      const breakdown = {
+        length:    scoreLength(L),
+        diversity: scoreDiversity(present.length),
+        pattern:   scorePattern(password, scan),
+        entropy:   scoreEntropy(entropy)
+      };
+      let raw = breakdown.length + breakdown.diversity + breakdown.pattern + breakdown.entropy;
+
+      // Apply the WORST (lowest multiplier) penalty across all detections
+      if (scan.penalties.length) {
+        const worst = Math.min(...scan.penalties.map(p => p.multiplier));
+        raw *= worst;
+      }
+      if (isCommon)   raw *= 0.30;       // common-password collapse
+      if (isPersonal) raw *= 0.60;       // personal-context penalty
+
+      const score = Math.max(0, Math.round(raw));
+      const tier  = tlmTier(score).tier;
+
+      // ----- Adaptive guidance (§5) -----
+      if (L < 12) {
+        suggestions.push('Add more characters — aim for a minimum of 12 to 16 characters.');
+      }
+      if (present.length < 4) {
+        suggestions.push('Mix uppercase and lowercase letters, and include numbers throughout the password.');
+      }
+      if (scan.penalties.length) {
+        suggestions.push('Remove predictable sequences, personal dates, or standard dictionary words.');
+      }
+      if (!passed.special) {
+        suggestions.push('Add at least one special character (!, @, #, %, …).');
+      } else if (scan.penalties.some(p => p.key === 'lazySymbol')) {
+        suggestions.push('Integrate special characters randomly, avoiding placing a single symbol at the very end.');
+      }
+      if (isCommon)   suggestions.push('This password appears on lists of commonly-leaked passwords — choose a different one.');
+      if (isPersonal) suggestions.push('Avoid using your name, username, or other personal information.');
+
+      // Checklist hint for sequence (re-uses passed.sequence)
+      if (!passed.sequence) {
+        suggestions.push('Avoid obvious sequences like "1234" or "abcd".');
+      }
+
+      if (!suggestions.length || score >= 100) {
+        suggestions.push('Excellent! Your password meets all our security checks.');
+      }
+
+      return {
+        score,
+        tier,
+        passed,
+        suggestions,
+        isCommon,
+        breakdown,
+        penalties: scan.penalties,
+        warnings:  scan.warnings,
+        entropy,
+        presentCount: present.length
+      };
+    }
+
+    function scoreToTier(score) {
+      return tlmTier(score).tier;
+    }
+    function tierLabel(tier) {
+      return { weak: 'Weak', fair: 'Fair', good: 'Good', strong: 'Strong', ultra: 'Very Strong' }[tier] || '—';
+    }
+
+    // ===========================================================
+    // RENDER
+    // ===========================================================
+    function render(result) {
+      const tier = scoreToTier(result.score);
+
+      // Checklist — uses 12-char baseline and new tier labels
+      checklistEl.querySelectorAll('li').forEach(li => {
+        const rule = li.dataset.rule;
+        const isMet = !!result.passed[rule];
+        li.classList.toggle('met', isMet);
+        li.classList.toggle('failed', !isMet && input.value.length > 0);
+        const icon = li.querySelector('.icon');
+        icon.textContent = isMet ? '✓' : (input.value ? '✕' : '·');
+      });
+
+      // Helper text — tier-coloured guidance container.
+      // When the breach tracker reports a compromised password we
+      // OVERRIDE every standard formatting advice line with a
+      // single, urgent directive per the §4 dynamic guidance
+      // integration brief.
+      helperText.classList.remove('weak', 'fair', 'good', 'strong', 'moderate', 'ultra', 'breach');
+      if (input.value) {
+        if (breachResult.state === 'compromised') {
+          helperText.classList.add('breach');
+          helperText.innerHTML = '<ul><li>' + escapeHtml(
+            'This exact password is public and highly vulnerable. ' +
+            'You must choose a completely different phrase.'
+          ) + '</li></ul>';
+        } else {
+          helperText.classList.add(tier);
+          helperText.innerHTML = '<ul>' +
+            result.suggestions.map(s => `<li>${escapeHtml(s)}</li>`).join('') +
+            '</ul>';
+        }
+      } else {
+        helperText.textContent = 'Start typing to see feedback.';
+      }
+
+      // Submit gating — allow even weak passwords so we can capture the
+      // intervention moment (the whole point of the study).
+      submitBtn.disabled = !input.value;
+    }
+
+    // ===========================================================
+    // RENDER TELEMETRY
+    //   Updates strength rating, length tracker, entropy bits,
+    //   character-diversity pills, conditional warnings, and the
+    //   six cyber-attack timelines on every keystroke.
+    // ===========================================================
+    // ===========================================================
+    // LENGTH STAGE (per brief §2 — 4-stage scale)
+    //   <8  chars → stage-1  weak (red)
+    //   8–11     → stage-2  weak
+    //   12–15    → stage-3  moderate (amber)
+    //   16–20    → stage-4  strong (green)
+    //   21+      → stage-5  very strong (cyan-glow)
+    // ===========================================================
+    function lengthStage(L) {
+      if (L < 8)  return { idx: 1, pct: Math.min(100, L/8 * 25),          tier: 'weak'      };
+      if (L <= 11) return { idx: 2, pct: 25 + ((L-8)/4) * 25,             tier: 'weak'      };
+      if (L <= 15) return { idx: 3, pct: 50 + ((L-12)/4) * 25,            tier: 'moderate'  };
+      if (L <= 20) return { idx: 4, pct: 75 + ((L-16)/5) * 20,            tier: 'strong'    };
+      return            { idx: 5, pct: Math.min(100, 95 + (L-21)*1),      tier: 'ultra'     };
+    }
+
+    function toggleTelemetryReveal(password) {
+      const telemetryChamber = document.querySelector('.telemetry-chamber');
+      const validationPanel = document.querySelector('.validation-panel');
+      const basic = document.querySelector('.telemetry-section[data-section="basic"]');
+      const alerts = document.querySelector('.telemetry-alerts');
+      const simulation = document.querySelector('.telemetry-simulation');
+      const shouldOpen = Boolean(password && password.trim().length > 0);
+
+      if (telemetryChamber) {
+        telemetryChamber.classList.toggle('is-open', shouldOpen);
+      }
+
+      if (validationPanel) {
+        validationPanel.classList.toggle('is-open', shouldOpen);
+      }
+
+      if (basic) {
+        basic.classList.toggle('is-open', shouldOpen);
+        basic.dataset.open = shouldOpen ? 'true' : 'false';
+        basic.style.maxHeight = shouldOpen ? '320px' : '0px';
+        basic.style.opacity = shouldOpen ? '1' : '0';
+        basic.style.transform = shouldOpen ? 'translateY(0)' : 'translateY(8px)';
+      }
+
+      if (alerts) {
+        alerts.classList.toggle('is-open', shouldOpen);
+        alerts.dataset.open = shouldOpen ? 'true' : 'false';
+        alerts.style.maxHeight = shouldOpen ? '280px' : '0px';
+        alerts.style.opacity = shouldOpen ? '1' : '0';
+        alerts.style.transform = shouldOpen ? 'translateY(0)' : 'translateY(8px)';
+      }
+
+      if (simulation) {
+        simulation.classList.toggle('is-open', shouldOpen);
+        simulation.dataset.open = shouldOpen ? 'true' : 'false';
+        simulation.style.maxHeight = shouldOpen ? '460px' : '0px';
+        simulation.style.opacity = shouldOpen ? '1' : '0';
+        simulation.style.transform = shouldOpen ? 'translateY(0)' : 'translateY(8px)';
+      }
+    }
+
+    function renderTelemetry(password) {
+      const { L, R, entropy, present } = tlmEntropy(password);
+
+      // Run the full evaluation so we can read the 100-pt tier + breakdown
+      const evalResult = password ? evaluate(password) : null;
+      const score   = evalResult ? evalResult.score : 0;
+      const { tier: tlmTierKey, label: tlmTierLabel } = tlmTier(score);
+
+      // §3 -- Strength rating (100-pt tier)
+      elsTlmStrength.textContent = password ? `${tlmTierLabel} · ${score}` : '—';
+      elsTlmStrength.className = 'v ' + (password ? tlmTierKey : '');
+      elsTlmStrengthBar.className = 'telemetry-track ' + (password ? tlmTierKey : '');
+      elsTlmStrengthBar.firstElementChild.style.width = password
+        ? Math.min(100, score) + '%'
+        : '0%';
+
+      // §3 -- Length tracker (4-stage scale + 12-char baseline)
+      const stage = lengthStage(L);
+      elsTlmLength.textContent = String(L);
+      elsTlmLength.className = 'v ' + stage.tier;
+      elsTlmLengthBar.className = 'telemetry-track length stage-' + stage.idx;
+      elsTlmLengthBar.firstElementChild.style.width = stage.pct + '%';
+
+      // §3 -- Entropy bits — green only above 80-bit threshold
+      const entropyTier = entropy >= 80 ? 'ultra'
+                        : entropy >= 60 ? 'strong'
+                        : entropy >= 40 ? 'good'
+                        : 'weak';
+      elsTlmEntropy.textContent = entropy.toFixed(2) + ' bits';
+      elsTlmEntropy.className = 'v ' + (password ? entropyTier : '');
+      elsTlmEntropyBar.className = 'telemetry-track ' + (password ? entropyTier : '');
+      elsTlmEntropyBar.firstElementChild.style.width = password
+        ? Math.min(100, (entropy / 128) * 100) + '%'
+        : '0%';
+
+      // §3 -- Character diversity pills
+      elsTlmDiversity.querySelectorAll('.pill').forEach(pill => {
+        const k = pill.dataset.key;
+        const met = present.some(p => p.key === k);
+        pill.classList.toggle('met', met);
+      });
+
+      // §4 -- Conditional warning engine (pattern scanner output)
+      // The warnings list itself stays empty until the scanner
+      // finds something to flag, but the "Conditional alerts"
+      // section header is always rendered — the container space
+      // is permanently reserved.
+      if (!password) {
+        elsTlmWarnings.classList.remove('visible');
+        elsTlmWarningList.innerHTML = '';
+      } else {
+        const items = (evalResult && evalResult.warnings) || [];
+        if (items.length > 0) {
+          elsTlmWarningList.innerHTML = items
+            .map(s => `<li>${escapeHtml(s)}</li>`).join('');
+          elsTlmWarnings.classList.add('visible');
+        } else {
+          elsTlmWarningList.innerHTML = '';
+          elsTlmWarnings.classList.remove('visible');
+        }
+      }
+
+      // §5 -- Cyber-attack simulation timelines
+      ['desktop', 'gpu', 'farm'].forEach(hw => {
+        const bf = tlmCrackTime(password, hw, false);
+        const oa = tlmCrackTime(password, hw, true);
+        TLM.bf[hw].time.textContent = password ? tlmFormatDuration(bf.seconds) : '—';
+        TLM.oa[hw].time.textContent = password ? tlmFormatDuration(oa.seconds) : '—';
+        TLM.bf[hw].fill.style.width = (bf.fraction * 100) + '%';
+        TLM.oa[hw].fill.style.width = (oa.fraction * 100) + '%';
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // ===========================================================
+    // GUIDED EDUCATIONAL INTERVENTIONS
+    // Generate cryptographically-strong 16-char passwords locally.
+    // ===========================================================
+    function generateStrongPassword() {
+      const lower  = 'abcdefghijkmnopqrstuvwxyz';
+      const upper  = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+      const num    = '23456789';
+      const spec   = '!@#$%^&*?+=';
+      const all    = lower + upper + num + spec;
+
+      const arr = new Uint32Array(16);
+      crypto.getRandomValues(arr);
+
+      // Guarantee one of each class
+      const guaranteed = [
+        lower[arr[0]  % lower.length],
+        upper[arr[1]  % upper.length],
+        num[arr[2]    % num.length],
+        spec[arr[3]   % spec.length]
+      ];
+
+      const rest = [];
+      for (let i = 4; i < 16; i++) {
+        rest.push(all[arr[i] % all.length]);
+      }
+
+      // Shuffle (Fisher-Yates) so guaranteed chars aren't always at front
+      const combined = guaranteed.concat(rest);
+      for (let i = combined.length - 1; i > 0; i--) {
+        const j = arr[i % arr.length] % (i + 1);
+        [combined[i], combined[j]] = [combined[j], combined[i]];
+      }
+      return combined.join('');
+    }
+
+function renderSuggestions() {
+    // 1. Use the weak input that triggered the modal
+    const weakBase = input.value.trim() || 'password';
+    const base = weakBase.toLowerCase();
+
+    // 2. Define mutation helpers
+    const symbols = ['!', '@', '#', '$', '%', '^', '&', '*', '?', '+'];
+    const getSymbol = (i) => symbols[i % symbols.length];
+
+    // Generate a non‑sequential numeric string of length `len`
+    function nonSequentialNumber(len) {
+        // Start with a shuffled string of "1234567890", then take first `len`
+        const digits = '1234567890';
+        const shuffled = digits.split('').sort(() => Math.random() - 0.5).join('');
+        // Ensure it's not sequential (e.g., "123", "456") – if it is, re‑shuffle
+        let result = shuffled.slice(0, len);
+        // Simple check for consecutive runs (e.g., "123", "456")
+        const hasConsecutive = /(012|123|234|345|456|567|678|789|890|098|987|876|765|654|543|432|321|210)/.test(result);
+        if (hasConsecutive) {
+            // Swap two characters to break sequence
+            const arr = result.split('');
+            const idx1 = Math.floor(Math.random() * len);
+            let idx2 = (idx1 + 1) % len;
+            [arr[idx1], arr[idx2]] = [arr[idx2], arr[idx1]];
+            result = arr.join('');
+        }
+        return result;
+    }
+
+    // 3. Generate case variations of the base
+    function caseVariations(str) {
+        const variants = [];
+        // Original (all lower)
+        variants.push(str);
+        // Capitalized first letter
+        variants.push(str.charAt(0).toUpperCase() + str.slice(1));
+        // All upper
+        variants.push(str.toUpperCase());
+        // Inverted case (alternating)
+        variants.push(str.split('').map((c, i) => i % 2 === 0 ? c.toUpperCase() : c.toLowerCase()).join(''));
+        // Random case (preserve length)
+        const randCase = str.split('').map(c => Math.random() > 0.5 ? c.toUpperCase() : c.toLowerCase()).join('');
+        variants.push(randCase);
+        return variants;
+    }
+
+    // 4. Build strong alternatives from each variation
+    const suggestions = [];
+    const used = new Set();
+
+    const variants = caseVariations(base);
+    for (let i = 0; i < variants.length && suggestions.length < 4; i++) {
+        let seed = variants[i];
+        // Ensure length at least 8 before padding
+        while (seed.length < 8) seed += seed; // simple duplication if too short
+
+        // Choose a clean symbol boundary
+        const sym = getSymbol(i);
+        // Generate non‑sequential numeric block (5 digits gives good entropy)
+        const numBlock = nonSequentialNumber(5);
+
+        // Combine: seed + symbol + numBlock
+        let candidate = seed + sym + numBlock;
+
+        // If still under 12, pad with extra digits (non‑sequential)
+        while (candidate.length < 12) {
+            candidate += nonSequentialNumber(2);
+        }
+
+        // Ensure at least one uppercase, lowercase, digit, and special
+        // (our construction already guarantees that: seed has letters, sym is special, numBlock has digits)
+        // But just in case, enforce:
+        if (!/[A-Z]/.test(candidate)) candidate = candidate.slice(0, -1) + 'A';
+        if (!/[a-z]/.test(candidate)) candidate = candidate.slice(0, -1) + 'a';
+        if (!/[0-9]/.test(candidate)) candidate = candidate.slice(0, -1) + '7';
+        if (!/[^A-Za-z0-9]/.test(candidate)) candidate = candidate.slice(0, -1) + '!';
+
+        // Break any remaining consecutive sequences (extra safety)
+        const seqRegex = /(012|123|234|345|456|567|678|789|890|abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz)/gi;
+        candidate = candidate.replace(seqRegex, (match) => {
+            // Shuffle the matched sequence to break it
+            return match.split('').sort(() => Math.random() - 0.5).join('');
+        });
+
+        // Deduplicate and add
+        if (!used.has(candidate)) {
+            used.add(candidate);
+            suggestions.push(candidate);
+        }
+    }
+
+    // 5. If we don't have 4, fallback to fully random strong passwords
+    while (suggestions.length < 4) {
+        const randPw = generateStrongPassword(); // existing function
+        if (!used.has(randPw)) {
+            used.add(randPw);
+            suggestions.push(randPw);
+        }
+    }
+
+    // 6. Render the suggestions (same UI as before)
+    suggestionList.innerHTML = '';
+    suggestions.forEach(pw => {
+        const li = document.createElement('li');
+        const code = document.createElement('span');
+        code.textContent = pw;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'use-btn';
+        btn.textContent = 'USE THIS';
+        btn.addEventListener('click', () => {
+          // ===========================================================
+          // USE THIS — INTERVENTION PACKET ROUTING
+          //   The user just accepted a system recommendation.  We MUST
+          //   treat this as a complete intervention resolution, not just
+          //   a field update.  Without the routing below, the baseline
+          //   captured at openModal() is never paired with the
+          //   adaptation, and the Behavioral Flow + Intervention
+          //   Outcomes modules remain empty.
+          //
+          //   Steps in order:
+          //     1. Write the chosen suggestion into the field
+          //     2. Re-evaluate so we have a fresh `result` for the
+          //        new string (its score/tier are the ADAPTATION tier)
+          //     3. Capture modal-interaction friction metrics
+          //     4. Push an intervention entry (outcome = 'improved')
+          //     5. Push a resilience entry (baseline + catalyst +
+          //        adaptation + hesitation) so the Behavioral Flow
+          //        storyboard renders
+          //     6. Close the modal
+          //     7. Call finalizeSubmission with the intervention packet
+          //        so the Submission log gets the *final* string AND
+          //        the dashboard aggregator can flag it as
+          //        intervention-driven.
+          // ===========================================================
+          input.value = pw;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+
+          const adoptedResult = evaluate(input.value);
+          const adoptedTier   = scoreToTier(adoptedResult.score);
+
+          // Step 4 — intervention entry (CHOSE TO IMPROVE counter)
+          recordIntervention(adoptedTier, 'improved');
+          // Step 5 — resilience entry (Behavioral Flow storyboard)
+          recordResilience(adoptedResult, adoptedTier, 'improved');
+
+          // Step 6 — close the modal so the user sees the toast + field
+          closeModal();
+          input.focus();
+          showToast('Strong password adopted ✓');
+
+          // Step 7 — finalize the submission with the intervention
+          // packet attached.  finalizeSubmission() now writes
+          // intervention: { triggered: true, outcome: 'improved',
+          //   suggestionAccepted: true, ... } onto the submission
+          // payload so the portal aggregator can identify modal-driven
+          // strong passwords.
+          finalizeSubmission(adoptedResult, {
+            triggered: true,
+            outcome: 'improved',
+            suggestionAccepted: true
+          });
+        });
+        li.appendChild(code);
+        li.appendChild(btn);
+        suggestionList.appendChild(li);
+    });
+}
+
+    // ===========================================================
+    // MODAL CONTROL
+    // ===========================================================
+    let lastFocus = null;
+
+    function openModal(tier) {
+      lastFocus = document.activeElement;
+      modalTitleText.textContent = tier === 'weak'
+        ? 'This password is at risk'
+        : 'Your password could be stronger';
+      renderSuggestions();
+      modal.classList.add('open');
+      // Move focus into the modal
+      setTimeout(() => modalImprove.focus(), 50);
+      document.addEventListener('keydown', trapEscape);
+
+      // ===========================================================
+      // RESILIENCE DELTA ENGINE — Baseline Capture
+      //   The first password the student tried to submit is the
+      //   ground-truth representation of their natural vulnerability.
+      //   We snapshot it here, along with the heuristic failures that
+      //   triggered the intervention, so the portal can compare it to
+      //   whatever the student ultimately submits.
+      // ===========================================================
+      try {
+        const baselineResult = evaluate(input.value);
+        const failedRules = Object.entries(baselineResult.passed)
+          .filter(([, ok]) => !ok)
+          .map(([rule]) => rule);
+        const missing = [];
+        if (!/[A-Z]/.test(input.value))         missing.push('uppercase');
+        if (!/[a-z]/.test(input.value))         missing.push('lowercase');
+        if (!/[0-9]/.test(input.value))         missing.push('digit');
+        if (!/[^A-Za-z0-9]/.test(input.value))  missing.push('symbol');
+        if (baselineResult.isCommon)            missing.push('common-password');
+
+        telemetry.baseline = {
+          password:        input.value,
+          passwordLength:  input.value.length,
+          tier:            tier,
+          score:           baselineResult.score,
+          failedRules:     failedRules,
+          missing:         missing,
+          entropy:         baselineResult.suggestions.length
+                            ? null   // not directly computed here
+                            : null,
+          capturedAt:      new Date().toISOString()
+        };
+        // Reset hesitation counters so the portal can measure *only*
+        // the deliberation time AFTER the modal opened.
+        telemetry.hesitationStartedAt = performance.now();
+        telemetry.hesitationKeypresses = 0;
+        telemetry.hesitationBackspaces = 0;
+      } catch (_) {
+        // Baseline capture is best-effort; the rest of the flow must
+        // continue working even if it fails.
+      }
+    }
+    function closeModal() {
+      modal.classList.remove('open');
+      document.removeEventListener('keydown', trapEscape);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    function trapEscape(e) {
+      if (e.key === 'Escape') closeModal();
+    }
+
+    // ===========================================================
+    // TOAST
+    // ===========================================================
+    let toastTimer = null;
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    // ===========================================================
+    // PERSISTENCE — hand off to the research portal
+    // ===========================================================
+    function persist(submission) {
+      try {
+        const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        list.push(submission);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      } catch (err) {
+        console.warn('Could not persist submission:', err);
+      }
+    }
+
+    // ===========================================================
+    // RESILIENCE DELTA ENGINE — Persistence
+    //   Records the full behavioural arc for a single participant
+    //   who triggered the intervention modal:
+    //     • baseline   — their first vulnerable attempt
+    //     • catalyst   — the specific heuristic(s) that fired
+    //     • adaptation — the password they ultimately submitted
+    //     • hesitation — time + corrections spent between modal
+    //                    open and final submit
+    // ===========================================================
+    function persistResilience(record) {
+      try {
+        const list = JSON.parse(localStorage.getItem(RESILIENCE_KEY) || '[]');
+        list.push(record);
+        localStorage.setItem(RESILIENCE_KEY, JSON.stringify(list));
+      } catch (err) {
+        console.warn('Could not persist resilience record:', err);
+      }
+    }
+
+    // ===========================================================
+    // EVENT WIRING
+    // ===========================================================
+    input.addEventListener('input', () => {
+      telemetry.lastPassword = input.value;
+      toggleTelemetryReveal(input.value);
+      const result = evaluate(input.value);
+      render(result);
+      renderTelemetry(input.value);
+      // Kick off the HIBP k-anonymity query.  The breach module
+      // updates its own DOM and re-renders the helper text via
+      // a MutationObserver-style follow-up because the verdict
+      // may arrive AFTER the synchronous render has finished.
+      breachQuery(input.value);
+      // If the verdict is already known (typing within the same
+      // string) re-render the helper so the override fires
+      // immediately rather than waiting for the network.
+      if (breachResult.password === input.value
+          && (breachResult.state === 'compromised' || breachResult.state === 'secure')) {
+        render(result);
+      }
+    });
+
+    toggleBtn.addEventListener('click', () => {
+      const hidden = input.type === 'password';
+      input.type = hidden ? 'text' : 'password';
+      toggleBtn.setAttribute('aria-pressed', String(hidden));
+      toggleBtn.setAttribute('aria-label', hidden ? 'Hide password' : 'Show password');
+      toggleBtn.querySelector('span').textContent = hidden ? '🙈' : '👁';
+      input.focus();
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!input.value) return;
+
+      const result  = evaluate(input.value);
+      const tier    = scoreToTier(result.score);
+      telemetry.finalTier = tier;
+
+      // The friction point: weak or fair passwords trigger the modal.
+      if (tier === 'weak' || tier === 'fair') {
+        openModal(tier);
+        return;
+      }
+
+      // Good or strong → submit (in a real study you'd still send to server)
+      finalizeSubmission(result);
+    });
+
+    function finalizeSubmission(result, interventionPacket) {
+      telemetry.finishedAt = performance.now();
+      const elapsedMs = telemetry.finishedAt - (telemetry.startedAt || telemetry.finishedAt);
+
+      // ===========================================================
+      // INTERVENTION PACKET RESOLUTION
+      //   The submission payload must carry the unified intervention
+      //   triple so the portal can route the record to BOTH the
+      //   Submission log AND the Behavioral Flow / Intervention
+      //   Outcomes modules.  Three sources for the packet, in
+      //   priority order:
+      //
+      //     a. An explicit packet passed in by the "USE THIS"
+      //        handler (modal-driven strong password).
+      //     b. A packet already attached to `telemetry.intervention`
+      //        by `recordIntervention()` (modal-button path).
+      //     c. The default — { triggered: false, outcome: 'none' }
+      //        for a clean, no-modal submission.
+      //
+      //   The `baseline` and `hesitation` mirrors are added when a
+      //   modal interaction actually occurred so the Behavioral
+      //   Flow storyboard can render a complete arc even if the
+      //   resilience entry was lost (defensive).
+      // ===========================================================
+      const packet = interventionPacket
+        || telemetry.intervention
+        || { triggered: false, outcome: 'none' };
+
+      const submission = {
+        id: 'asp_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        timestamp: new Date().toISOString(),
+        username:  document.getElementById('username').value,
+        password:  input.value,                    // captured for telemetry
+        passwordLength: input.value.length,
+        tier:      result && result.score != null ? scoreToTier(result.score) : telemetry.finalTier,
+        score:     result ? result.score : null,
+        elapsedMs: Math.round(elapsedMs),
+        keypressCount:  telemetry.keypressCount,
+        backspaceCount: telemetry.backspaceCount,
+        isCommon:  result ? result.isCommon : false,
+        intervention: {
+          triggered:           packet.triggered || false,
+          outcome:             packet.outcome   || 'none',
+          suggestionAccepted:  packet.suggestionAccepted || false,
+          // Mirror the baseline + hesitation onto the submission so
+          // the portal aggregator can rebuild the full arc from the
+          // submission log alone if needed.
+          baseline:            packet.triggered && telemetry.baseline
+                                 ? {
+                                     password:      telemetry.baseline.password,
+                                     passwordLength: telemetry.baseline.passwordLength,
+                                     tier:          telemetry.baseline.tier
+                                   }
+                                 : null,
+          hesitationMs:        packet.triggered && telemetry.hesitationStartedAt
+                                 ? Math.round(performance.now() - telemetry.hesitationStartedAt)
+                                 : 0
+        }
+      };
+
+      persist(submission);
+      showToast('Account created — recorded for the study');
+      form.reset();
+      telemetry.startedAt = null;
+      telemetry.intervention = null;          // clear so the next form
+                                              // submit starts fresh
+      render(evaluate(''));
+    }
+
+    // Modal buttons
+    modalProceed.addEventListener('click', () => {
+      const result = evaluate(input.value);
+      const tier   = scoreToTier(result.score);
+      // Record the deliberate risk acceptance
+      recordIntervention(tier, 'proceeded');
+      // Resilience Delta: baseline → no adaptation (user accepted risk)
+      recordResilience(result, tier, 'proceeded');
+      closeModal();
+      finalizeSubmission(result, {
+        triggered: true,
+        outcome: 'proceeded',
+        suggestionAccepted: false
+      });
+    });
+    modalImprove.addEventListener('click', () => {
+      const result = evaluate(input.value);
+      const tier   = scoreToTier(result.score);
+      recordIntervention(tier, 'improved');
+      // Resilience Delta: baseline → adaptation (user heeded the warning)
+      recordResilience(result, tier, 'improved');
+      closeModal();
+      input.focus();
+      // ===========================================================
+      // "Improve my password" (manual custom revision) — The user
+      // dismissed the modal without picking a USE THIS suggestion.
+      // We finalize the submission here so the baseline gets paired
+      // with the (now manually-improved) adaptation immediately,
+      // without waiting for a second "Create Account" click that
+      // would lose the intervention context.
+      // ===========================================================
+      finalizeSubmission(result, {
+        triggered: true,
+        outcome: 'improved',
+        suggestionAccepted: false
+      });
+    });
+
+    function recordResilience(result, tier, outcome) {
+      if (!telemetry.baseline) return;          // no baseline = no delta
+      const hesitationMs = telemetry.hesitationStartedAt
+        ? Math.round(performance.now() - telemetry.hesitationStartedAt)
+        : 0;
+      const tierIndex = (t) => ({ weak: 0, fair: 1, good: 2, strong: 3 })[t] ?? 0;
+      const baselineTierIdx = tierIndex(telemetry.baseline.tier);
+      const adaptedTierIdx  = tierIndex(tier);
+      const delta = {
+        id:              'rd_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        timestamp:       new Date().toISOString(),
+        outcome:         outcome,              // 'proceeded' | 'improved'
+        baseline: {
+          password:       telemetry.baseline.password,
+          passwordLength: telemetry.baseline.passwordLength,
+          tier:           telemetry.baseline.tier,
+          score:          telemetry.baseline.score,
+          failedRules:    telemetry.baseline.failedRules,
+          missing:        telemetry.baseline.missing
+        },
+        catalyst: {
+          failedRules:    telemetry.baseline.failedRules,
+          missing:        telemetry.baseline.missing,
+          // Human-readable summary of the warning that fired
+          summary:        telemetry.baseline.failedRules.length
+                           ? telemetry.baseline.failedRules
+                               .map(r => r.charAt(0).toUpperCase() + r.slice(1))
+                               .join(', ') + ' rule(s) failed'
+                           : 'Password below strength threshold'
+        },
+        adaptation: {
+          password:       input.value,
+          passwordLength: input.value.length,
+          tier:           tier,
+          score:          result ? result.score : null,
+          changed:        input.value !== telemetry.baseline.password,
+          tierDelta:      adaptedTierIdx - baselineTierIdx
+        },
+        hesitation: {
+          ms:             hesitationMs,
+          keypresses:     telemetry.hesitationKeypresses || 0,
+          backspaces:     telemetry.hesitationBackspaces || 0
+        }
+      };
+      persistResilience(delta);
+      // Clear the baseline so the next modal-open starts fresh
+      telemetry.baseline = null;
+      telemetry.hesitationStartedAt = null;
+    }
+
+    // Backdrop click → treat as "improve"
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modalImprove.click();
+    });
+
+    function recordIntervention(tier, outcome) {
+      try {
+        const list = JSON.parse(localStorage.getItem('aspire_interventions') || '[]');
+        const entry = {
+          timestamp: new Date().toISOString(),
+          tier,
+          outcome,             // 'proceeded' | 'improved'
+          passwordLength: input.value.length
+        };
+        list.push(entry);
+        localStorage.setItem('aspire_interventions', JSON.stringify(list));
+        // ===========================================================
+        // INTERVENTION PACKET — CACHE FOR FINALIZATION
+        //   Mirror the latest intervention onto the telemetry state
+        //   so finalizeSubmission() can recover the outcome even if
+        //   the form re-submits later.  The packet is consumed
+        //   (set to null) by finalizeSubmission() once the
+        //   submission record has been written.
+        // ===========================================================
+        telemetry.intervention = {
+          triggered: true,
+          outcome: outcome,
+          suggestionAccepted: false,     // overridden by the USE THIS path
+          recordedAt: entry.timestamp
+        };
+      } catch (_) {}
+    }
+
+    // Initial render
+    render(evaluate(''));
+    toggleTelemetryReveal('');
+    renderTelemetry('');
+  })();
+  </script>
+</body>
+</html>

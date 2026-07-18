@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+        content="ASPIRE — Sign in to your study account to track your individual password resilience." />
+  <title>Sign In — ASPIRE Study</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%235570ff'/><stop offset='1' stop-color='%237689ff'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><text x='32' y='42' text-anchor='middle' font-family='-apple-system,Segoe UI,Roboto,sans-serif' font-weight='800' font-size='34' fill='white'>A</text></svg>" />
+</head>
+<body class="has-global-header has-global-footer">
+
+  <!-- ============================================================
+       GLOBAL NAVIGATION HEADER
+       ============================================================ -->
+  <header class="global-header" role="banner">
+    <a class="gh-brand" href="index.html" aria-label="ASPIRE — back to hub">
+      <span class="logo" aria-hidden="true">A</span>
+      <span class="gh-brand-text">
+        ASPIRE
+        <small>Password Resilience Study</small>
+      </span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="registration.html">ASPIRE</a>
+      <a href="sign.html" class="active" aria-current="page">Sign In</a>
+      <a href="portal.html">Analytics Portal</a>
+      <a href="records.html">Data Records</a>
+    </nav>
+    <div class="nav-actions">
+      <input class="mobile-nav-toggle" id="mobile-nav-toggle-sign" type="checkbox" />
+      <label class="mobile-nav-trigger" for="mobile-nav-toggle-sign" aria-label="Toggle navigation menu">
+        <span aria-hidden="true"></span>
+      </label>
+      <label class="mobile-nav-backdrop" for="mobile-nav-toggle-sign" aria-hidden="true"></label>
+      <nav class="mobile-nav-drawer" aria-label="Primary">
+        <label class="mobile-nav-close" for="mobile-nav-toggle-sign" aria-label="Close navigation">×</label>
+        <a href="index.html">Home</a>
+        <a href="registration.html">ASPIRE</a>
+        <a href="sign.html" class="active" aria-current="page">Sign In</a>
+        <a href="portal.html">Analytics Portal</a>
+        <a href="records.html">Data Records</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       SIGN-IN HUB
+       Single-column, centralized card.  The card's primary job is
+       the Log In form.  Guest access is presented as a secondary
+       action below an "or" divider.  Sign Up is demoted to a
+       footer link inside the same card so the page never splits
+       attention across multiple competing columns.
+       ============================================================ -->
+  <main class="sign-hub">
+    <section class="card sign-card" aria-labelledby="sign-title">
+
+      <!-- §1 — Brand -->
+      <div class="brand">
+        <div class="logo" aria-hidden="true">A</div>
+        <span>ASPIRE Study Portal</span>
+      </div>
+
+      <h1 id="sign-title">Sign in to your study account</h1>
+      <p class="subtitle">
+        Sign up or log in to measure the vulnerability and resilience
+        of your personal password habits. Returning users jump
+        straight to their personal telemetry dashboard; new
+        participants can try the simulator without an account.
+      </p>
+
+      <!-- §2 — Primary focus: Log In form -->
+      <form class="sign-form" id="loginForm" action="https://formspree.io/f/xeeygqnb" method="POST" novalidate>
+        <label for="li-username">Username</label>
+        <input type="text" id="li-username" name="username"
+               autocomplete="username" required />
+
+        <label for="li-password">Password</label>
+        <input type="password" id="li-password" name="password"
+               autocomplete="current-password" required />
+
+        <button type="submit" class="pathway-action primary">
+          Open my dashboard →
+        </button>
+      </form>
+
+      <!-- §3 — Secondary focus: Guest access -->
+      <div class="sign-divider" role="separator" aria-label="or">
+        <span>or</span>
+      </div>
+
+      <a class="pathway-action sign-guest" href="registration.html">
+        Continue as guest
+      </a>
+      <p class="sign-path-note">
+        Guest mode opens the live participant simulator without
+        saving submissions to a profile. Useful for a quick
+        demonstration. Researchers should use the
+        <a href="portal.html">Analytics Portal</a> instead.
+      </p>
+
+      <!-- §4 — Footer link: Sign Up pathway -->
+      <p class="sign-up-prompt">
+        Don't have an account?
+        <a href="#" id="signUpLink">Sign up here</a>.
+      </p>
+
+    </section>
+  </main>
+
+  <footer class="global-footer" role="contentinfo">
+    <div class="gf-inner">
+      <span class="gf-block gf-left">&copy; 2026 ASPIRE. All rights reserved.</span>
+      <span class="gf-block gf-center">Advanced Student Password Interaction and Resilience Evaluator Academic Research Study</span>
+      <span class="gf-block gf-right">Data collected anonymously for behavioral analysis.</span>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ===========================================================
+    // PERSONAL ACCOUNTS — local-only identity layer
+    //
+    //   The system stores a small registry of {username → profile}
+    //   in localStorage so returning participants can log in to
+    //   their personal dashboard.  No password is persisted in
+    //   plain text — we keep a SHA-1 hash and a per-account
+    //   telemetry record.
+    // ===========================================================
+    const ACCOUNTS_KEY  = 'aspire_accounts';
+    const SESSION_KEY   = 'aspire_user_session';
+    const USER_DATA_KEY = 'aspire_user_data';
+
+    function loadAccounts() {
+      try { return JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || '{}'); }
+      catch (_) { return {}; }
+    }
+    function saveAccounts(map) {
+      try { localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(map)); }
+      catch (_) {}
+    }
+    function saveUserData(username, data) {
+      try {
+        const all = JSON.parse(localStorage.getItem(USER_DATA_KEY) || '{}');
+        all[username] = data;
+        localStorage.setItem(USER_DATA_KEY, JSON.stringify(all));
+      } catch (_) {}
+    }
+
+    // SHA-1 (RFC 3174) — in-browser implementation so the hash
+    // produced here matches what a HIBP integration would see.
+    function sha1Hex(input) {
+      const utf8 = unescape(encodeURIComponent(input));
+      const bytes = new Array(utf8.length);
+      for (let i = 0; i < utf8.length; i++) bytes[i] = utf8.charCodeAt(i);
+      const ml = bytes.length * 8;
+      bytes.push(0x80);
+      while (bytes.length % 64 !== 56) bytes.push(0);
+      for (let i = 7; i >= 0; i--) bytes.push((ml >>> (i * 8)) & 0xff);
+      let h0 = 0x67452301, h1 = 0xEFCDAB89, h2 = 0x98BADCFE,
+          h3 = 0x10325476, h4 = 0xC3D2E1F0;
+      for (let chunk = 0; chunk < bytes.length; chunk += 64) {
+        const w = new Array(80);
+        for (let i = 0; i < 16; i++) {
+          w[i] = (bytes[chunk + i*4] << 24)
+               | (bytes[chunk + i*4 + 1] << 16)
+               | (bytes[chunk + i*4 + 2] << 8)
+               |  bytes[chunk + i*4 + 3];
+        }
+        for (let i = 16; i < 80; i++) {
+          const v = w[i-3] ^ w[i-8] ^ w[i-14] ^ w[i-16];
+          w[i] = (v << 1) | (v >>> 31);
+        }
+        let a = h0, b = h1, c = h2, d = h3, e = h4;
+        for (let i = 0; i < 80; i++) {
+          const f = (i < 20)  ? (b & c) | (~b & d)
+                  : (i < 40)  ?  b ^ c ^ d
+                  : (i < 60)  ? (b & c) | (b & d) | (c & d)
+                              :  b ^ c ^ d;
+          const t = ((a << 5) | (a >>> 27)) + e + f + w[i] + (
+            i < 20 ? 0x5A827999 :
+            i < 40 ? 0x6ED9EBA1 :
+            i < 60 ? 0x8F1BBCDC :
+                     0xCA62C1D6
+          );
+          e = d; d = c; c = (b << 30) | (b >>> 2); b = a; a = t | 0;
+        }
+        h0 = (h0 + a) | 0; h1 = (h1 + b) | 0; h2 = (h2 + c) | 0;
+        h3 = (h3 + d) | 0; h4 = (h4 + e) | 0;
+      }
+      return [h0, h1, h2, h3, h4]
+        .map(v => (v >>> 0).toString(16).padStart(8, '0'))
+        .join('').toUpperCase();
+    }
+
+    function flashError(form, message) {
+      form.classList.remove('is-error');
+      void form.offsetWidth;             // reflow → animation restart
+      form.classList.add('is-error');
+      let hint = form.querySelector('.form-hint');
+      if (!hint) {
+        hint = document.createElement('p');
+        hint.className = 'form-hint';
+        hint.style.color = 'var(--weak)';
+        hint.style.fontSize = '0.8rem';
+        hint.style.marginTop = '8px';
+        hint.style.textAlign = 'left';
+        form.appendChild(hint);
+      }
+      hint.textContent = message;
+      setTimeout(() => form.classList.remove('is-error'), 1200);
+    }
+
+    // ----- Log In -------------------------------------------------
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('li-username').value.trim();
+      const password = document.getElementById('li-password').value;
+      if (!username || !password) {
+        flashError(loginForm, 'Enter your username and password to continue.');
+        return;
+      }
+      const accounts = loadAccounts();
+      const account  = accounts[username];
+      if (!account || account.passwordHash !== sha1Hex(password)) {
+        flashError(loginForm, 'Invalid credentials. Please try again.');
+        return;
+      }
+      sessionStorage.setItem(SESSION_KEY, username);
+      window.location.href = 'user-telemetry.html';
+    });
+
+    // ----- Footer link: opens a lightweight in-page sign-up -----
+    // The footer "Sign up here" link surfaces a small inline form
+    // inside the same card so the user never loses the centered
+    // single-column layout.
+    const signUpLink = document.getElementById('signUpLink');
+    if (signUpLink) {
+      signUpLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        openSignUpOverlay();
+      });
+    }
+
+    function openSignUpOverlay() {
+      if (document.getElementById('signupOverlay')) return;
+
+      const overlay = document.createElement('div');
+      overlay.id = 'signupOverlay';
+      overlay.className = 'sign-overlay';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.setAttribute('aria-labelledby', 'signupTitle');
+      overlay.innerHTML = `
+        <div class="sign-overlay-card">
+          <button type="button" class="sign-overlay-close"
+                  aria-label="Close sign-up form">×</button>
+          <h2 id="signupTitle">Create your study account</h2>
+          <p class="subtitle">
+            Pick a username and a 12+ character password to begin
+            tracking your personal password resilience.
+          </p>
+          <form class="sign-form" id="signupForm" novalidate>
+            <label for="su-first">First name</label>
+            <input type="text" id="su-first" name="firstName"
+                   autocomplete="given-name" required />
+            <label for="su-last">Last name</label>
+            <input type="text" id="su-last" name="lastName"
+                   autocomplete="family-name" required />
+            <label for="su-username">Username</label>
+            <input type="text" id="su-username" name="username"
+                   autocomplete="username" required />
+            <label for="su-password">Password (12+ characters)</label>
+            <input type="password" id="su-password" name="password"
+                   autocomplete="new-password" required />
+            <button type="submit" class="pathway-action primary">
+              Create account →
+            </button>
+          </form>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      const close = () => overlay.remove();
+      overlay.querySelector('.sign-overlay-close').addEventListener('click', close);
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close();
+      });
+      document.addEventListener('keydown', function esc(e) {
+        if (e.key === 'Escape') {
+          close();
+          document.removeEventListener('keydown', esc);
+        }
+      });
+
+      const signupForm = document.getElementById('signupForm');
+      signupForm.addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        const first    = document.getElementById('su-first').value.trim();
+        const last     = document.getElementById('su-last').value.trim();
+        const username = document.getElementById('su-username').value.trim();
+        const password = document.getElementById('su-password').value;
+
+        if (!first || !last) {
+          flashError(signupForm, 'Please enter your first and last name.');
+          return;
+        }
+        if (username.length < 3) {
+          flashError(signupForm, 'Username must be at least 3 characters.');
+          return;
+        }
+        if (password.length < 12) {
+          flashError(signupForm, 'Password must be at least 12 characters to begin tracking.');
+          return;
+        }
+
+        const accounts = loadAccounts();
+        if (accounts[username]) {
+          flashError(signupForm, 'That username is already taken. Try logging in instead.');
+          return;
+        }
+
+        accounts[username] = {
+          firstName: first,
+          lastName:  last,
+          passwordHash: sha1Hex(password),
+          createdAt: new Date().toISOString()
+        };
+        saveAccounts(accounts);
+        saveUserData(username, {
+          submissions: [],
+          interventions: [],
+          resilience: [],
+          createdAt: new Date().toISOString()
+        });
+
+        sessionStorage.setItem(SESSION_KEY, username);
+        window.location.href = 'user-telemetry.html';
+      });
+    }
+  })();
+  </script>
+</body>
+</html>

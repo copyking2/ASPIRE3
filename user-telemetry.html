@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+        content="ASPIRE — Your personal password resilience dashboard. Review your submission history, behavioral flow, and Resilience Delta." />
+  <title>My Telemetry — ASPIRE Study</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%235570ff'/><stop offset='1' stop-color='%237689ff'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><text x='32' y='42' text-anchor='middle' font-family='-apple-system,Segoe UI,Roboto,sans-serif' font-weight='800' font-size='34' fill='white'>A</text></svg>" />
+</head>
+<body class="has-global-header has-global-footer">
+
+  <!-- ============================================================
+       GLOBAL NAVIGATION HEADER
+       ============================================================ -->
+  <header class="global-header" role="banner">
+    <a class="gh-brand" href="index.html" aria-label="ASPIRE — back to hub">
+      <span class="logo" aria-hidden="true">A</span>
+      <span class="gh-brand-text">
+        ASPIRE
+        <small>Password Resilience Study</small>
+      </span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="sign.html">Sign In</a>
+      <a href="user-telemetry.html" class="active" aria-current="page">My Telemetry</a>
+      <a href="records.html">Data Records</a>
+    </nav>
+    <div class="nav-actions">
+      <input class="mobile-nav-toggle" id="mobile-nav-toggle-telemetry" type="checkbox" />
+      <label class="mobile-nav-trigger" for="mobile-nav-toggle-telemetry" aria-label="Toggle navigation menu">
+        <span aria-hidden="true"></span>
+      </label>
+      <label class="mobile-nav-backdrop" for="mobile-nav-toggle-telemetry" aria-hidden="true"></label>
+      <nav class="mobile-nav-drawer" aria-label="Primary">
+        <label class="mobile-nav-close" for="mobile-nav-toggle-telemetry" aria-label="Close navigation">×</label>
+        <a href="index.html">Home</a>
+        <a href="sign.html">Sign In</a>
+        <a href="user-telemetry.html" class="active" aria-current="page">My Telemetry</a>
+        <a href="records.html">Data Records</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       PERSONAL DASHBOARD
+       A private view of just the signed-in user's data:
+         §1  Hero — greeting + key stats
+         §2  Personal behavioral flow (intervention history)
+         §3  Submission log (only this user's rows)
+         §4  Account actions
+       ============================================================ -->
+  <main class="user-page">
+
+    <!-- §1 — Hero -->
+    <section class="user-hero" aria-labelledby="user-hero-h1">
+      <div class="user-hero-text">
+        <h1 id="user-hero-h1">Your personal telemetry</h1>
+        <p class="subtitle" id="user-greeting">
+          Review how your password choices have evolved over time.
+        </p>
+      </div>
+      <div class="user-hero-actions">
+        <a class="btn" href="sign.html">Switch account</a>
+        <button class="btn danger" id="signOutBtn" type="button">Sign out</button>
+      </div>
+    </section>
+
+    <!-- §2 — Personal KPIs -->
+    <section class="stats user-stats" aria-label="Your summary statistics">
+      <div class="stat" data-stat-height="92">
+        <div class="label">Your submissions</div>
+        <div class="value" id="userStatTotal">0</div>
+        <div class="sub">All time</div>
+      </div>
+      <div class="stat" data-stat-height="92">
+        <div class="label">Strongest tier reached</div>
+        <div class="value" id="userStatBest">—</div>
+        <div class="sub">Personal best</div>
+      </div>
+      <div class="stat highlight" data-stat-height="92">
+        <div class="label">Interventions</div>
+        <div class="value" id="userStatInterv">0</div>
+        <div class="sub">times you were warned</div>
+      </div>
+      <div class="stat highlight" data-stat-height="92">
+        <div class="label">Resilience Delta</div>
+        <div class="value" id="userStatDelta">—</div>
+        <div class="sub">avg. tier jump per intervention</div>
+      </div>
+    </section>
+
+    <!-- §3 — Personal behavioral flow -->
+    <section class="resilience" aria-label="Your behavioral flow">
+      <div class="resilience-header">
+        <h3>Your behavioral flow
+          <small>vulnerable → intervened → adapted</small>
+        </h3>
+        <div class="resilience-count">
+          <strong id="userResilienceCount">0</strong> intervention sessions
+        </div>
+      </div>
+      <div class="resilience-empty" id="userResilienceEmpty">
+        <p>No intervention sessions yet. Generate a weak submission in
+           the <a href="registration.html">simulator</a> to record your
+           first behavioral flow.</p>
+      </div>
+      <ul class="resilience-flow" id="userResilienceFlow"></ul>
+    </section>
+
+    <!-- §4 — Personal submission log -->
+    <section class="logs" aria-label="Your submission history">
+      <div class="logs-header">
+        <h3>Your submission log
+          <small id="userLogsCount">0 entries</small>
+        </h3>
+        <div class="filters" role="group" aria-label="Filter by tier">
+          <button class="filter-btn active" data-user-filter="all">All</button>
+          <button class="filter-btn" data-user-filter="weak">Weak</button>
+          <button class="filter-btn" data-user-filter="fair">Fair</button>
+          <button class="filter-btn" data-user-filter="good">Good</button>
+          <button class="filter-btn" data-user-filter="strong">Strong</button>
+        </div>
+      </div>
+      <div class="logs-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Tier</th>
+              <th>Score</th>
+              <th>Length</th>
+              <th>Password</th>
+            </tr>
+          </thead>
+          <tbody id="userLogsBody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="userEmptyState">
+        <h3>No submissions yet</h3>
+        <p>Open the <a href="registration.html">simulator</a> to record
+           your first password attempt.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="global-footer" role="contentinfo">
+    <div class="gf-inner">
+      <span class="gf-block gf-left">&copy; 2026 ASPIRE. All rights reserved.</span>
+      <span class="gf-block gf-center">Advanced Student Password Interaction and Resilience Evaluator Academic Research Study</span>
+      <span class="gf-block gf-right">Data collected anonymously for behavioral analysis.</span>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ===========================================================
+    // PERSONAL DASHBOARD CONTROLLER
+    //   The data shown here is filtered to a single signed-in
+    //   participant.  Submissions, interventions and resilience
+    //   records are stored per-username by the registration
+    //   module; we read the same storage keys but only the rows
+    //   whose `username` matches the active session.
+    // ===========================================================
+    const SESSION_KEY    = 'aspire_user_session';
+    const USER_DATA_KEY  = 'aspire_user_data';
+    const SUBMISSIONS_KEY = 'aspire_submissions';
+    const INTERV_KEY     = 'aspire_interventions';
+    const RESILIENCE_KEY = 'aspire_resilience';
+
+    const sessionUser = sessionStorage.getItem(SESSION_KEY);
+    if (!sessionUser) {
+      window.location.href = 'sign.html';
+      return;
+    }
+
+    function loadJSON(key) {
+      try { return JSON.parse(localStorage.getItem(key) || 'null'); }
+      catch (_) { return null; }
+    }
+
+    // ----- Personal account greeting -----------------------------
+    const accounts = loadJSON('aspire_accounts') || {};
+    const account  = accounts[sessionUser] || {};
+    const greeting = document.getElementById('user-greeting');
+    if (greeting && account.firstName) {
+      greeting.textContent =
+        'Signed in as ' + account.firstName + ' ' + (account.lastName || '') +
+        '. Below is your personal telemetry — no aggregate study data is shown.';
+    }
+
+    // ----- Filter to this user only ------------------------------
+    const subs       = (loadJSON(SUBMISSIONS_KEY) || []).filter(s => s.username === sessionUser);
+    const intervs    = (loadJSON(INTERV_KEY) || []).filter(i => i.username === sessionUser);
+    const resilience = (loadJSON(RESILIENCE_KEY) || []).filter(r => r.username === sessionUser);
+
+    // ----- KPI cards ---------------------------------------------
+    document.getElementById('userStatTotal').textContent = subs.length;
+
+    const tierOrder = { weak: 0, fair: 1, good: 2, strong: 3 };
+    let best = null;
+    subs.forEach(s => {
+      if (!best || (tierOrder[s.tier] ?? 0) > (tierOrder[best.tier] ?? 0)) {
+        best = s;
+      }
+    });
+    document.getElementById('userStatBest').textContent = best
+      ? best.tier.charAt(0).toUpperCase() + best.tier.slice(1)
+      : '—';
+
+    document.getElementById('userStatInterv').textContent = intervs.length;
+    const improved = resilience.filter(r => r.outcome === 'improved');
+    if (improved.length) {
+      const deltas = improved
+        .map(r => (r.adaptation && r.adaptation.tierDelta) || 0);
+      const avg = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+      document.getElementById('userStatDelta').textContent =
+        (avg >= 0 ? '+' : '') + avg.toFixed(2);
+    } else {
+      document.getElementById('userStatDelta').textContent = '—';
+    }
+
+    // ----- Behavioral flow ---------------------------------------
+    document.getElementById('userResilienceCount').textContent = resilience.length;
+    const flowEl     = document.getElementById('userResilienceFlow');
+    const flowEmpty  = document.getElementById('userResilienceEmpty');
+    if (!resilience.length) {
+      flowEmpty.hidden = false;
+    } else {
+      flowEmpty.hidden = true;
+      flowEl.innerHTML = resilience.slice().reverse().map((r, i) => {
+        const adapted  = r.outcome === 'improved';
+        const hesSec   = ((r.hesitation && r.hesitation.ms || 0) / 1000).toFixed(1);
+        const hesKeys  = (r.hesitation && r.hesitation.keypresses) || 0;
+        const hesBacks = (r.hesitation && r.hesitation.backspaces) || 0;
+        const tier     = (t) => `<span class="tier-pill ${t}">${t}</span>`;
+        const deltaTxt = ((r.adaptation.tierDelta || 0) >= 0 ? '+' : '')
+                          + (r.adaptation.tierDelta || 0);
+        const delay    = i < 10 ? (i * 70) : 0;
+        return `
+          <li class="flow-row ${adapted ? 'adapted' : 'declined'}" ${delay ? `style="animation-delay:${delay}ms"` : ''}>
+            <div class="flow-meta">
+              <span class="flow-time">${formatDate(r.timestamp)}</span>
+              <span class="flow-outcome ${r.outcome}">
+                ${adapted ? '✓ Adapted' : '⚠ Accepted risk'}
+              </span>
+            </div>
+            <div class="flow-arc">
+              <div class="flow-stage baseline">
+                <div class="stage-label">Attempt 1 · Baseline</div>
+                <div class="stage-tier">${tier(r.baseline.tier)}</div>
+                <div class="stage-pw pw-mono">${escapeHtml(r.baseline.password || '')}</div>
+                <div class="stage-meta">${r.baseline.passwordLength} chars</div>
+              </div>
+              <div class="flow-arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-icon">⚡</div>
+              </div>
+              <div class="flow-stage catalyst">
+                <div class="stage-label">Intervention triggered</div>
+                <div class="stage-meta catalyst-summary">${escapeHtml(r.catalyst.summary)}</div>
+                <div class="stage-meta">
+                  <span class="hesitation-pill">⏱ ${hesSec}s</span>
+                  <span class="hesitation-pill">⌨ ${hesKeys} keys</span>
+                  <span class="hesitation-pill">⌫ ${hesBacks} corrections</span>
+                </div>
+              </div>
+              <div class="flow-arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-icon">→</div>
+              </div>
+              <div class="flow-stage adapted">
+                <div class="stage-label">Attempt 2 · Adaptation</div>
+                <div class="stage-tier">${tier(r.adaptation.tier)}</div>
+                <div class="stage-pw pw-mono">${escapeHtml(r.adaptation.password || '')}</div>
+                <div class="stage-meta">
+                  ${r.adaptation.passwordLength} chars
+                  <span class="delta-tag ${(r.adaptation.tierDelta || 0) > 0 ? 'positive' : (r.adaptation.tierDelta || 0) < 0 ? 'negative' : 'neutral'}">Δ ${deltaTxt}</span>
+                </div>
+              </div>
+            </div>
+          </li>
+        `;
+      }).join('');
+    }
+
+    // ----- Submission log (filtered) -----------------------------
+    let activeFilter = 'all';
+    const bodyEl  = document.getElementById('userLogsBody');
+    const emptyEl = document.getElementById('userEmptyState');
+    const countEl = document.getElementById('userLogsCount');
+
+    function renderUserLog() {
+      const rows = subs
+        .filter(s => activeFilter === 'all' || s.tier === activeFilter)
+        .slice()
+        .reverse();
+      countEl.textContent = rows.length + ' ' + (rows.length === 1 ? 'entry' : 'entries');
+      if (!rows.length) {
+        bodyEl.innerHTML = '';
+        emptyEl.hidden = false;
+        return;
+      }
+      emptyEl.hidden = true;
+      const STAGGER = 30;
+      bodyEl.innerHTML = rows.map((s, i) => {
+        const delay = i < STAGGER ? (i * 50) : 0;
+        return `
+          <tr ${delay ? `style="animation-delay:${delay}ms"` : ''}>
+            <td>${formatDate(s.timestamp)}</td>
+            <td><span class="tier-pill ${s.tier}">${s.tier}</span></td>
+            <td>${s.score != null ? (s.score + 1) + '/5' : '—'}</td>
+            <td>${s.passwordLength}</td>
+            <td><span class="pw-mono pw-cell">${escapeHtml(s.password || '')}</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+    renderUserLog();
+
+    document.querySelectorAll('[data-user-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-user-filter]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.userFilter;
+        renderUserLog();
+      });
+    });
+
+    // ----- Sign out ----------------------------------------------
+    document.getElementById('signOutBtn').addEventListener('click', () => {
+      sessionStorage.removeItem(SESSION_KEY);
+      window.location.href = 'sign.html';
+    });
+
+    // ----- Helpers -----------------------------------------------
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    function formatDate(iso) {
+      try {
+        const d = new Date(iso);
+        return d.toLocaleString(undefined, {
+          month: 'short', day: '2-digit',
+          hour: '2-digit', minute: '2-digit', second: '2-digit'
+        });
+      } catch (_) { return iso; }
+    }
+  })();
+  </script>
+</body>
+</html>

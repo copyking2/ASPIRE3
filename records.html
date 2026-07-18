@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ASPIRE — Who's Been Recorded: the aggregate dataset directory powering the Password Resilience Study." />
+  <title>Who's Been Recorded — ASPIRE</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%235570ff'/><stop offset='1' stop-color='%237689ff'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><text x='32' y='42' text-anchor='middle' font-family='-apple-system,Segoe UI,Roboto,sans-serif' font-weight='800' font-size='34' fill='white'>A</text></svg>" />
+</head>
+<body class="has-global-header has-global-footer">
+
+  <!-- ============================================================
+       GLOBAL NAVIGATION HEADER
+       Reused across every ASPIRE page so participants and
+       researchers always know where they are.  The page background
+       is offset by 64px (see .has-global-header in style.css).
+       ============================================================ -->
+  <header class="global-header" role="banner">
+    <a class="gh-brand" href="index.html" aria-label="ASPIRE — back to hub">
+      <span class="logo" aria-hidden="true">A</span>
+      <span class="gh-brand-text">
+        ASPIRE
+        <small>Password Resilience Study</small>
+      </span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="registration.html">ASPIRE</a>
+      <a href="sign.html">Sign In</a>
+      <a href="portal.html">Analytics Portal</a>
+      <a href="records.html" class="active" aria-current="page">Data Records</a>
+    </nav>
+    <div class="nav-actions">
+      <input class="mobile-nav-toggle" id="mobile-nav-toggle-records" type="checkbox" />
+      <label class="mobile-nav-trigger" for="mobile-nav-toggle-records" aria-label="Toggle navigation menu">
+        <span aria-hidden="true"></span>
+      </label>
+      <label class="mobile-nav-backdrop" for="mobile-nav-toggle-records" aria-hidden="true"></label>
+      <nav class="mobile-nav-drawer" aria-label="Primary">
+        <label class="mobile-nav-close" for="mobile-nav-toggle-records" aria-label="Close navigation">×</label>
+        <a href="index.html">Home</a>
+        <a href="registration.html">ASPIRE</a>
+        <a href="sign.html">Sign In</a>
+        <a href="portal.html">Analytics Portal</a>
+        <a href="records.html" class="active" aria-current="page">Data Records</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       RECORDS LEDGER — main content canvas
+       The .records-page wrapper is offset for the fixed header
+       and the global footer.  Each section is documented in the
+       §1–§4 brief in the user request.
+       ============================================================ -->
+  <main class="records-page">
+
+    <!-- §1 — Title canvas -->
+    <section class="records-title" aria-labelledby="records-title-h1">
+      <h1 id="records-title-h1">Who's Been Recorded</h1>
+      <span class="records-sub">
+        Aggregate datasets loaded into the ASPIRE telemetry system
+      </span>
+    </section>
+
+    <!-- §2 — Macro telemetry cards (KPIs) -->
+    <section class="records-macro" aria-label="Macro telemetry">
+      <div class="macro-card">
+        <div class="macro-value" id="kpiDatasets">12</div>
+        <div class="macro-label">Datasets processed</div>
+      </div>
+      <div class="macro-card">
+        <div class="macro-value" id="kpiAccounts">4,217</div>
+        <div class="macro-label">Passwords analyzed</div>
+      </div>
+    </section>
+
+    <!-- §3 — Context and guidance container -->
+    <section class="records-context" aria-labelledby="records-context-h2">
+      <div class="records-context-text">
+        <h2 id="records-context-h2">About the Telemetry Data</h2>
+        <p>
+          The ASPIRE study investigates how university students choose,
+          refine, and persist their account passwords.  By surveying
+          common vulnerabilities across large, real-world credential
+          sets, the system produces a behavioural map of what makes a
+          password resilient — and what makes it fail in seconds.
+        </p>
+        <p>
+          The goal is to guide users toward stronger habits through
+          live feedback, intervene on the riskiest submissions, and
+          measure how participants adapt after seeing a warning.  Every
+          row below is a single dataset, an aggregate of millions of
+          individual password choices that fuels the analytics portal.
+        </p>
+      </div>
+
+      <div class="records-actions" aria-label="Related resources">
+        <a class="records-action" href="portal.html">
+          <span class="records-action-icon" aria-hidden="true">↗</span>
+          <span class="records-action-text">
+            <span class="records-action-k">Open the Analytics Portal</span>
+            <span class="records-action-v">Live study telemetry &amp; tier distribution</span>
+          </span>
+        </a>
+        <a class="records-action" href="https://haveibeenpwned.com/API/v3" target="_blank" rel="noopener">
+          <span class="records-action-icon" aria-hidden="true">⚠</span>
+          <span class="records-action-text">
+            <span class="records-action-k">HIBP Pwned Passwords API</span>
+            <span class="records-action-v">k-anonymity range lookup · v3 reference</span>
+          </span>
+        </a>
+        <a class="records-action" href="https://owasp.org/www-project-cheat-sheets/" target="_blank" rel="noopener">
+          <span class="records-action-icon" aria-hidden="true">⌘</span>
+          <span class="records-action-text">
+            <span class="records-action-k">OWASP Password Storage Cheat Sheet</span>
+            <span class="records-action-v">Authoritative guidance for password resilience</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <!-- §4 — Aggregate data grid -->
+    <section class="records-grid-section" aria-labelledby="records-grid-h2">
+      <h2 id="records-grid-h2">Browse All Recorded Datasets</h2>
+
+      <div class="records-mobile-cards" id="recordsMobileCards" aria-live="polite"></div>
+
+      <table class="records-table" id="recordsTable">
+        <thead>
+          <tr>
+            <th data-sort-key="name" data-sort="none" scope="col">
+              Dataset Name
+              <span class="sort-arrow" aria-hidden="true">↕</span>
+            </th>
+            <th data-sort-key="count" data-sort="none" scope="col">
+              Entry Count
+              <span class="sort-arrow" aria-hidden="true">↕</span>
+            </th>
+            <th data-sort-key="added" data-sort="none" scope="col">
+              Date Added
+              <span class="sort-arrow" aria-hidden="true">↕</span>
+            </th>
+            <th data-sort-key="collected" data-sort="none" scope="col">
+              Collection Date
+              <span class="sort-arrow" aria-hidden="true">↕</span>
+            </th>
+            <th scope="col" class="col-action-label">
+              <span class="sr-only">Action</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="recordsBody">
+          <!-- Populated by the script below.  Static rows ship as a
+               fallback for browsers with JavaScript disabled. -->
+          <tr>
+            <td class="col-name">RockYou-2024 Leak Compilation</td>
+            <td class="col-count">2,847,221</td>
+            <td class="col-date">2024-08-12</td>
+            <td class="col-date">2009-12-04</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open RockYou-2024 details">→</a></td>
+          </tr>
+          <tr>
+            <td class="col-name">LinkedIn Credential Dump (Hashed)</td>
+            <td class="col-count">1,205,498</td>
+            <td class="col-date">2024-09-03</td>
+            <td class="col-date">2012-06-15</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open LinkedIn details">→</a></td>
+          </tr>
+          <tr>
+            <td class="col-name">ASPIRE In-House Field Study</td>
+            <td class="col-count">3,184</td>
+            <td class="col-date">2025-02-19</td>
+            <td class="col-date">2025-01-08</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open Field Study details">→</a></td>
+          </tr>
+          <tr>
+            <td class="col-name">MySpace Legacy Breach</td>
+            <td class="col-count">412,310</td>
+            <td class="col-date">2024-10-22</td>
+            <td class="col-date">2008-08-01</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open MySpace details">→</a></td>
+          </tr>
+          <tr>
+            <td class="col-name">CollegeNet Academic Portal</td>
+            <td class="col-count">72,489</td>
+            <td class="col-date">2024-11-30</td>
+            <td class="col-date">2020-11-15</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open CollegeNet details">→</a></td>
+          </tr>
+          <tr>
+            <td class="col-name">Adobe Customer Accounts (Truncated)</td>
+            <td class="col-count">1,910,887</td>
+            <td class="col-date">2024-07-08</td>
+            <td class="col-date">2013-10-04</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open Adobe details">→</a></td>
+          </tr>
+          <tr>
+            <td class="col-name">Yahoo! Voice Anonymized Subset</td>
+            <td class="col-count">582,431</td>
+            <td class="col-date">2024-09-19</td>
+            <td class="col-date">2012-07-11</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open Yahoo Voice details">→</a></td>
+          </tr>
+          <tr>
+            <td class="col-name">Dropbox 2012 Re-issue (Hashed)</td>
+            <td class="col-count">689,217</td>
+            <td class="col-date">2024-12-14</td>
+            <td class="col-date">2012-07-01</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open Dropbox details">→</a></td>
+          </tr>
+          <tr>
+            <td class="col-name">ASPIRE Pilot (Spring Semester)</td>
+            <td class="col-count">891</td>
+            <td class="col-date">2024-05-21</td>
+            <td class="col-date">2024-04-12</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open ASPIRE Pilot details">→</a></td>
+          </tr>
+          <tr>
+            <td class="col-name">Exploit.in Aggregator (Public Mirror)</td>
+            <td class="col-count">593,427</td>
+            <td class="col-date">2025-01-09</td>
+            <td class="col-date">2016-10-13</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open Exploit.in details">→</a></td>
+          </tr>
+          <tr>
+            <td class="col-name">Collection #1 (AntiPublic Style)</td>
+            <td class="col-count">772,904,991</td>
+            <td class="col-date">2024-06-30</td>
+            <td class="col-date">2019-01-07</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open Collection #1 details">→</a></td>
+          </tr>
+          <tr>
+            <td class="col-name">ASPIRE — Synthetic Validation Set</td>
+            <td class="col-count">12,500</td>
+            <td class="col-date">2025-03-04</td>
+            <td class="col-date">2025-02-28</td>
+            <td><a class="row-arrow" href="portal.html" aria-label="Open Synthetic Validation details">→</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       GLOBAL FOOTER ANCHOR
+       Solid, opaque charcoal block with copyright attribution.
+       Mirrors the global-header chrome on every page.
+       ============================================================ -->
+  <footer class="global-footer" role="contentinfo">
+    <div class="gf-inner">
+      <span class="gf-block gf-left">&copy; 2026 ASPIRE. All rights reserved.</span>
+      <span class="gf-block gf-center">Advanced Student Password Interaction and Resilience Evaluator Academic Research Study</span>
+      <span class="gf-block gf-right">Data collected anonymously for behavioral analysis.</span>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ===========================================================
+    // SORTABLE TABLE
+    //   Click a column header to toggle asc/desc/none.  We sort
+    //   in place so the table never reflows.  Date columns are
+    //   parsed as ISO so string comparison works.
+    // ===========================================================
+    const SORT_KEYS = {
+      name:      (r) => r.name.toLowerCase(),
+      count:     (r) => r.count,
+      added:     (r) => new Date(r.added).getTime(),
+      collected: (r) => new Date(r.collected).getTime()
+    };
+    const recordsMobileCards = document.getElementById('recordsMobileCards');
+    const COLUMNS = ['name', 'count', 'added', 'collected'];
+
+    let sortKey = null;
+    let sortDir = 'none';        // 'asc' | 'desc' | 'none'
+    let lastDir = 'asc';         // remembers the last non-none dir per column
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function parseRow(tr) {
+      const cells = tr.querySelectorAll('td');
+      return {
+        name:      cells[0].textContent.trim(),
+        count:     parseInt(cells[1].textContent.replace(/,/g, ''), 10),
+        added:     cells[2].textContent.trim(),
+        collected: cells[3].textContent.trim(),
+        actionHtml: cells[4].innerHTML,
+        _tr:       tr
+      };
+    }
+
+    function renderMobileCards() {
+      if (!recordsMobileCards) return;
+      const tbody = document.getElementById('recordsBody');
+      if (!tbody) return;
+      const rows = Array.from(tbody.querySelectorAll('tr')).map(parseRow);
+      recordsMobileCards.innerHTML = rows.map((row) => `
+        <article class="record-card">
+          <details>
+            <summary>
+              <div class="record-card-title">
+                <strong>${escapeHtml(row.name)}</strong>
+                <span>${row.count.toLocaleString()} entries</span>
+              </div>
+              <span class="record-card-toggle">Details</span>
+            </summary>
+            <div class="record-card-details">
+              <div class="record-card-detail"><span>Added</span><strong>${escapeHtml(row.added)}</strong></div>
+              <div class="record-card-detail"><span>Collected</span><strong>${escapeHtml(row.collected)}</strong></div>
+              <div class="record-card-detail"><span>Entries</span><strong>${row.count.toLocaleString()}</strong></div>
+              <div class="record-card-actions">${row.actionHtml}</div>
+            </div>
+          </details>
+        </article>
+      `).join('');
+    }
+
+    function applySort() {
+      const tbody = document.getElementById('recordsBody');
+      if (!tbody) return;
+      const rows = Array.from(tbody.querySelectorAll('tr')).map(parseRow);
+
+      // Reset header arrows
+      document.querySelectorAll('.records-table thead th').forEach(th => {
+        if (th.dataset.sortKey) th.dataset.sort = 'none';
+      });
+
+      if (sortDir === 'none' || !sortKey) return;
+
+      const key = SORT_KEYS[sortKey];
+      rows.sort((a, b) => {
+        const av = key(a), bv = key(b);
+        if (av < bv) return sortDir === 'asc' ? -1 : 1;
+        if (av > bv) return sortDir === 'asc' ?  1 : -1;
+        return 0;
+      });
+
+      // Re-attach rows in new order
+      const frag = document.createDocumentFragment();
+      rows.forEach(r => frag.appendChild(r._tr));
+      tbody.appendChild(frag);
+      renderMobileCards();
+
+      // Update active header arrow
+      const activeTh = document.querySelector(
+        '.records-table thead th[data-sort-key="' + sortKey + '"]'
+      );
+      if (activeTh) activeTh.dataset.sort = sortDir;
+    }
+
+    document.querySelectorAll('.records-table thead th[data-sort-key]')
+      .forEach(th => {
+        th.addEventListener('click', () => {
+          const k = th.dataset.sortKey;
+          if (sortKey !== k) { sortKey = k; sortDir = 'asc'; }
+          else if (sortDir === 'asc')      { sortDir = 'desc'; }
+          else if (sortDir === 'desc')     { sortDir = 'none'; }
+          else                             { sortDir = 'asc'; }
+          applySort();
+        });
+      });
+
+    renderMobileCards();
+  })();
+  </script>
+</body>
+</html>

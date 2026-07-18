@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASPIRE Research Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- ============================================================
+       PRE-PAINT INITIAL STATE (Security by Default)
+       Runs synchronously before <body> is parsed, so the very first
+       frame of the page already reflects the correct display state.
+         • If a valid session token exists in sessionStorage, the
+           dashboard is shown and the gate is removed immediately.
+         • Otherwise the gate is the only visible element and the
+           dashboard is fully shielded (display: none + z-index: 0).
+       This eliminates any flash of overlapping content.
+       ============================================================ -->
+  <script>
+    (function () {
+      try {
+        var token = sessionStorage.getItem('aspire_session');
+        var style = document.createElement('style');
+        if (token === '1') {
+          // Session still active — gate must not appear at all.
+          style.textContent =
+            '#loginGate{display:none !important;}' +
+            '#dashboard{display:grid !important;}';
+        } else {
+          // No session — dashboard stays fully shielded.
+          style.textContent =
+            '#dashboard{display:none !important;}';
+        }
+        document.head.appendChild(style);
+      } catch (_) {
+        // sessionStorage unavailable (private mode, etc.) — fall back
+        // to the safest state: dashboard hidden.
+      }
+    })();
+  </script>
+</head>
+
+<body class="has-global-header has-global-footer">
+  <header class="global-header" role="banner">
+    <a class="gh-brand" href="index.html" aria-label="ASPIRE — back to hub">
+      <span class="logo" aria-hidden="true">A</span>
+      <span class="gh-brand-text">
+        ASPIRE
+        <small>Password Resilience Study</small>
+      </span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="registration.html">ASPIRE</a>
+      <a href="sign.html">Sign In</a>
+      <a href="portal.html" class="active" aria-current="page">Analytics Portal</a>
+      <a href="records.html">Data Records</a>
+    </nav>
+    <div class="nav-actions">
+      <input class="mobile-nav-toggle" id="mobile-nav-toggle-portal" type="checkbox" />
+      <label class="mobile-nav-trigger" for="mobile-nav-toggle-portal" aria-label="Toggle navigation menu">
+        <span aria-hidden="true"></span>
+      </label>
+      <label class="mobile-nav-backdrop" for="mobile-nav-toggle-portal" aria-hidden="true"></label>
+      <nav class="mobile-nav-drawer" aria-label="Primary">
+        <label class="mobile-nav-close" for="mobile-nav-toggle-portal" aria-label="Close navigation">×</label>
+        <a href="index.html">Home</a>
+        <a href="registration.html">ASPIRE</a>
+        <a href="sign.html">Sign In</a>
+        <a href="portal.html" class="active" aria-current="page">Analytics Portal</a>
+        <a href="records.html">Data Records</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-shell">
+    <!-- ============================================================
+         LOGIN GATE (researcher-only)
+         Demo credential: aspire2024 / aspire2024
+         ============================================================ -->
+    <div class="login-gate" id="loginGate">
+      <h2>ASPIRE Research Portal</h2>
+      <p>Restricted to authorised researchers. Sign in to view study telemetry.</p>
+      <form id="loginForm">
+        <label for="username" style="display:block; font-size:0.8rem; margin-bottom:0.3rem;">Username</label>
+        <input type="text" id="username" name="username" autocomplete="username" />
+        <label for="password" style="display:block; font-size:0.8rem; margin-bottom:0.3rem;">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" />
+        <button type="submit" id="loginSubmit">
+          <span class="btn-label">Sign in</span>
+          <span class="btn-spinner" aria-hidden="true"></span>
+        </button>
+      </form>
+      <div class="hint">
+        Demo credentials &mdash; <strong>aspire2024</strong> / <strong>aspire2024</strong>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         DASHBOARD (hidden until authenticated)
+         Vertical hierarchy:
+           Zone 1  Global header      (full width, page-level)
+           Zone 2  Application header (full width, app-level)
+           Zone 3  Content wrapper    (sidebar + main canvas row)
+         The sidebar and the canvas are siblings in Zone 3, so they
+         scroll in unison with the rest of the page (Fluid canvas).
+         ============================================================ -->
+    <div id="dashboard" hidden>
+    <header class="app-header">
+      <div class="app-header-top">
+        <button class="rail-toggle" id="railToggle" type="button" aria-label="Toggle navigation rail" aria-pressed="true">
+          <span class="rail-toggle-bar"></span>
+          <span class="rail-toggle-bar"></span>
+          <span class="rail-toggle-bar"></span>
+        </button>
+        <div class="brand">
+          <div class="logo" aria-hidden="true">A</div>
+          <div>
+            <h1>ASPIRE Research Portal</h1>
+            <small>Password Resilience Study &mdash; Live Telemetry</small>
+          </div>
+        </div>
+      </div>
+      <!-- Anchored profile data — first/last name rigidly in the far corner -->
+      <div class="app-subheader" id="subheader">
+        <div class="header-actions">
+          <span class="sr-only" id="srStatus">Signed in as researcher.</span>
+          <button class="btn" id="refreshBtn" type="button">Refresh</button>
+          <button class="btn" id="exportBtn" type="button">Export CSV</button>
+          <button class="btn danger" id="clearBtn" type="button">Clear data</button>
+          <button class="btn" id="logoutBtn" type="button">Sign out</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Zone 3 — shared row that holds the sidebar and the main canvas.
+         Scrolling is handled at the page level (body), so both
+         siblings move together as one unified Fluid canvas. -->
+    <div class="app-shell">
+      <aside class="nav-rail" aria-label="Primary navigation">
+        <div class="rail-brand" aria-hidden="true">
+          <div class="logo">A</div>
+        </div>
+        <nav class="rail-nav">
+          <button class="rail-btn active" type="button" data-rail="overview" aria-label="Overview" title="Overview">
+            <span class="rail-icon" aria-hidden="true">◐</span>
+            <span class="rail-label">Overview</span>
+          </button>
+          <button class="rail-btn" type="button" data-rail="telemetry" aria-label="Telemetry" title="Telemetry">
+            <span class="rail-icon" aria-hidden="true">◇</span>
+            <span class="rail-label">Telemetry</span>
+          </button>
+          <button class="rail-btn" type="button" data-rail="behavior" aria-label="Behavior" title="Behavior">
+            <span class="rail-icon" aria-hidden="true">↯</span>
+            <span class="rail-label">Behavior</span>
+          </button>
+          <button class="rail-btn" type="button" data-rail="logs" aria-label="Logs" title="Logs">
+            <span class="rail-icon" aria-hidden="true">≡</span>
+            <span class="rail-label">Logs</span>
+          </button>
+        </nav>
+        <div class="rail-foot" aria-hidden="true">
+          <div class="rail-dot" title="Live data stream"></div>
+        </div>
+      </aside>
+
+      <main class="app-canvas">
+        <!-- Stat cards -->
+        <section class="stats" aria-label="Summary statistics">
+          <div class="stat" data-stat-height="92">
+            <div class="label">Total submissions</div>
+            <div class="value" id="statTotal">0</div>
+            <div class="sub" id="statLatest">No data yet</div>
+          </div>
+          <div class="stat" data-stat-height="92">
+            <div class="label">Avg. time on password</div>
+            <div class="value" id="statAvgTime">—</div>
+            <div class="sub">seconds</div>
+          </div>
+          <div class="stat" data-stat-height="92">
+            <div class="label">Avg. backspaces</div>
+            <div class="value" id="statAvgBack">—</div>
+            <div class="sub">corrections per user</div>
+          </div>
+          <div class="stat" data-stat-height="92">
+            <div class="label">Common-password hits</div>
+            <div class="value" id="statCommon">0</div>
+            <div class="sub">flagged as leaked</div>
+          </div>
+          <div class="stat highlight" data-stat-height="92">
+            <div class="label">Intervention success rate</div>
+            <div class="value" id="statIntervSuccess">—</div>
+            <div class="sub">improved ÷ intervened</div>
+          </div>
+          <div class="stat highlight" data-stat-height="92">
+            <div class="label">Median hesitation</div>
+            <div class="value" id="statMedianHesitation">—</div>
+            <div class="sub">seconds after warning</div>
+          </div>
+          <div class="stat highlight" data-stat-height="92">
+            <div class="label">Resilience Delta</div>
+            <div class="value" id="statDelta">—</div>
+            <div class="sub">avg. tier jump per user</div>
+          </div>
+        </section>
+
+        <!-- Charts -->
+        <section class="charts" data-stagger-root>
+          <div class="chart-card" data-aspect="ratio-2-1">
+            <h3>Strength distribution <small>tier share across all submissions</small></h3>
+            <div class="tier-bar" id="tierBar" aria-label="Strength distribution bar">
+              <div class="slice weak" id="sliceWeak" style="flex:0">Weak</div>
+              <div class="slice fair" id="sliceFair" style="flex:0">Fair</div>
+              <div class="slice good" id="sliceGood" style="flex:0">Good</div>
+              <div class="slice strong" id="sliceStrong" style="flex:0">Strong</div>
+            </div>
+            <div class="tier-legend">
+              <div><span class="swatch weak"></span><span id="legendWeak">0 — Weak</span></div>
+              <div><span class="swatch fair"></span><span id="legendFair">0 — Fair</span></div>
+              <div><span class="swatch good"></span><span id="legendGood">0 — Good</span></div>
+              <div><span class="swatch strong"></span><span id="legendStrong">0 — Strong</span></div>
+            </div>
+          </div>
+
+          <div class="chart-card" data-aspect="ratio-2-1">
+            <h3>Secure adoption rate <small>good + strong passwords</small></h3>
+            <div class="adoption">
+              <div class="donut-wrap">
+                <svg width="160" height="160" viewBox="0 0 160 160" aria-hidden="true">
+                  <circle cx="80" cy="80" r="64" fill="none" stroke="var(--card-2)" stroke-width="20" />
+                  <circle id="donutFg" cx="80" cy="80" r="64" fill="none" stroke="var(--strong)" stroke-width="20"
+                    stroke-dasharray="402" stroke-dashoffset="402" stroke-linecap="round" />
+                </svg>
+                <div class="donut-center">
+                  <div class="pct" id="adoptionPct">0%</div>
+                  <div class="lbl">adopted</div>
+                </div>
+              </div>
+              <div class="adoption-detail" id="adoptionDetail">
+                <strong>0</strong> of <strong>0</strong> participants chose a resilient password.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Behavioral Flow -->
+        <section class="resilience" aria-label="Resilience Delta — behavioral flow" data-stagger-root>
+          <div class="resilience-header">
+            <h3>Behavioral flow <small>resilience delta: vulnerable → intervened → adapted</small></h3>
+            <div class="resilience-count">
+              <strong id="resilienceCount">0</strong> intervention sessions
+            </div>
+          </div>
+          <div class="resilience-empty" id="resilienceEmpty">
+            <p>No intervention sessions captured yet. A baseline/adaptation pair is recorded every
+              time the warning modal fires.</p>
+          </div>
+          <ul class="resilience-flow" id="resilienceFlow"></ul>
+        </section>
+
+        <!-- Interventions -->
+        <section class="interventions" aria-label="Intervention outcomes">
+          <h3>Intervention outcomes <small>weak/fair submissions</small></h3>
+          <div class="intervention-grid">
+            <div class="intervention-stat" data-stat-height="80">
+              <div class="lbl">Proceeded despite risk</div>
+              <div class="val proceed" id="intervProceed">0</div>
+            </div>
+            <div class="intervention-stat" data-stat-height="80">
+              <div class="lbl">Chose to improve</div>
+              <div class="val improve" id="intervImprove">0</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Logs table -->
+        <section class="logs">
+          <div class="logs-header">
+            <h3>Submission log <small id="logsCount">0 entries</small></h3>
+            <div class="filters" role="group" aria-label="Filter by tier">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="weak">Weak</button>
+              <button class="filter-btn" data-filter="fair">Fair</button>
+              <button class="filter-btn" data-filter="good">Good</button>
+              <button class="filter-btn" data-filter="strong">Strong</button>
+            </div>
+          </div>
+          <p class="logs-hint">Swipe sideways to scan the full submission history.</p>
+          <!-- Scroll-trapped table container: max-height locks so the page
+             never horizontal-scrolls even with hundreds of rows. -->
+          <div class="logs-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>User</th>
+                  <th>Password captured</th>
+                  <th>Tier</th>
+                  <th>Score</th>
+                  <th>Length</th>
+                  <th>Time</th>
+                  <th>Backspaces</th>
+                </tr>
+              </thead>
+              <tbody id="logsBody"></tbody>
+            </table>
+          </div>
+          <div class="empty" id="emptyState">
+            <h3>No data yet</h3>
+            <p>Open <code>registration.html</code> in another tab to generate sample submissions.</p>
+          </div>
+        </section>
+      </main>
+      </div>
+    </div>
+  </div>
+
+  <footer class="global-footer" role="contentinfo">
+    <div class="gf-inner">
+      <span class="gf-block gf-left">&copy; 2026 ASPIRE. All rights reserved.</span>
+      <span class="gf-block gf-center">Advanced Student Password Interaction and Resilience Evaluator Academic Research Study</span>
+      <span class="gf-block gf-right">Data collected anonymously for behavioral analysis.</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // ===========================================================
+      // CONFIG
+      // ===========================================================
+      const STORAGE_KEY = 'aspire_submissions';
+      const INTERV_KEY = 'aspire_interventions';
+      const RESILIENCE_KEY = 'aspire_resilience';
+      const SESSION_KEY = 'aspire_session';
+      const VALID_CREDS = { username: 'aspire2024', password: 'aspire2024' };
+
+      const TIERS = ['weak', 'fair', 'good', 'strong'];
+
+      // ===========================================================
+      // DOM
+      // ===========================================================
+      const loginGate = document.getElementById('loginGate');
+      const loginForm = document.getElementById('loginForm');
+      const dashboard = document.getElementById('dashboard');
+      const refreshBtn = document.getElementById('refreshBtn');
+      const exportBtn = document.getElementById('exportBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const logsBody = document.getElementById('logsBody');
+      const emptyState = document.getElementById('emptyState');
+      const logsCount = document.getElementById('logsCount');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+
+      const statTotal = document.getElementById('statTotal');
+      const statLatest = document.getElementById('statLatest');
+      const statAvgTime = document.getElementById('statAvgTime');
+      const statAvgBack = document.getElementById('statAvgBack');
+      const statCommon = document.getElementById('statCommon');
+
+      const sliceWeak = document.getElementById('sliceWeak');
+      const sliceFair = document.getElementById('sliceFair');
+      const sliceGood = document.getElementById('sliceGood');
+      const sliceStrong = document.getElementById('sliceStrong');
+      const legendWeak = document.getElementById('legendWeak');
+      const legendFair = document.getElementById('legendFair');
+      const legendGood = document.getElementById('legendGood');
+      const legendStrong = document.getElementById('legendStrong');
+
+      const donutFg = document.getElementById('donutFg');
+      const adoptionPct = document.getElementById('adoptionPct');
+      const adoptionDetail = document.getElementById('adoptionDetail');
+
+      const intervProceed = document.getElementById('intervProceed');
+      const intervImprove = document.getElementById('intervImprove');
+
+      const statIntervSuccess = document.getElementById('statIntervSuccess');
+      const statMedianHesitation = document.getElementById('statMedianHesitation');
+      const statDelta = document.getElementById('statDelta');
+      const resilienceFlow = document.getElementById('resilienceFlow');
+      const resilienceEmpty = document.getElementById('resilienceEmpty');
+      const resilienceCount = document.getElementById('resilienceCount');
+
+      const profileFirst = document.getElementById('profileFirst');
+      const profileLast = document.getElementById('profileLast');
+      const profileRole = document.getElementById('profileRole');
+
+      // ===========================================================
+      // PROFILE — anchored in the header's far corner
+      //   First / last name is split into two spans so it can flex
+      //   independently and never reflow when the data changes.
+      // ===========================================================
+      const PROFILE = {
+        first: 'Researcher',
+        last: 'Admin',
+        role: 'Principal Investigator'
+      };
+
+      // ===========================================================
+      // SESSION
+      // ===========================================================
+      function isSignedIn() {
+        return sessionStorage.getItem(SESSION_KEY) === '1';
+      }
+      // ===========================================================
+      // LOGIN GATE — Security Transition Engine
+      //
+      // Phase 1 — Sentinel:   dashboard shielded (opacity 0,
+      //                       pointer-events none, inert)
+      // Phase 2 — Verify:     inputs disabled, button shows spinner
+      // Phase 3 — Dissolve:   login card collapses backward (CSS)
+      // Phase 4 — Reveal:     rail + header unfurl, data cascades
+      //
+      // The transition chain is driven entirely by CSS class flips
+      // + a single verify delay to simulate credential checking.
+      // ===========================================================
+
+      // Auth delay (ms) — represents the credential check window. Kept
+      // short so the spinner is visible but not annoying.
+      const VERIFY_DELAY_MS = 650;
+
+      let pendingTransition = false;       // re-entrancy guard
+
+      function setGateState(state) {
+        const submitBtn = document.getElementById('loginSubmit');
+        const userInput = document.getElementById('username');
+        const passInput = document.getElementById('password');
+
+        // Add or remove the .verifying flag in one call
+        if (state === 'verifying') {
+          loginGate.classList.add('verifying');
+          if (submitBtn) submitBtn.classList.add('is-verifying');
+          if (userInput) { userInput.disabled = true; passInput.disabled = true; }
+        } else {
+          loginGate.classList.remove('verifying');
+          if (submitBtn) submitBtn.classList.remove('is-verifying');
+          if (userInput) { userInput.disabled = false; passInput.disabled = false; }
+        }
+      }
+
+      // State-driven display helpers — see brief §1–§3
+      function activateDashboard() {
+        dashboard.hidden = false;
+        dashboard.dataset.state = 'active';
+      }
+      function deactivateDashboard() {
+        dashboard.classList.remove('phase2', 'phase3', 'preparing');
+        dashboard.dataset.state = '';
+        dashboard.hidden = true;
+      }
+
+      function signIn() {
+        if (pendingTransition) return;          // ignore double-clicks
+        pendingTransition = true;
+
+        sessionStorage.setItem(SESSION_KEY, '1');
+
+        // Anchored profile — populate the corner-bound name cluster
+        if (profileFirst) profileFirst.textContent = PROFILE.first;
+        if (profileLast) profileLast.textContent = PROFILE.last;
+        if (profileRole) profileRole.textContent = PROFILE.role;
+
+        // =========================================================
+        // PHASE 1 (already in effect) + Phase 3 — Central collapse
+        //   The login card fades + scales backward into the canvas
+        //   while the dashboard is revealed with `preparing` flag
+        //   so it can mount BEFORE its data populates.
+        // =========================================================
+        // Stop the verifying spinner — credentials were good
+        setGateState('idle');
+
+        loginGate.classList.add('exiting');
+        activateDashboard();
+        dashboard.classList.add('preparing');
+
+        // Hand off to Phase 4 once the card finishes its collapse
+        setTimeout(() => {
+          // =======================================================
+          // PHASE 3b — Interaction removal
+          //   The card is now behind the dashboard and physically
+          //   removed so it can never block pointer events again.
+          // =======================================================
+          loginGate.hidden = true;
+          loginGate.classList.remove('exiting');
+
+          // =======================================================
+          // PHASE 4 — Perimeter unfurling + Data cascade
+          //   The nav-rail slides in from the left, the header
+          //   drops from the top. Spring-easing decelerates into
+          //   place. The data cards then surface upward in a
+          //   staggered cascade so the eye perceives a stream.
+          // =======================================================
+          dashboard.classList.remove('preparing');
+          dashboard.classList.add('phase2');
+          setTimeout(() => {
+            dashboard.classList.add('phase3');
+            render();
+            pendingTransition = false;
+          }, 380);
+        }, 220);
+      }
+
+      function signOut() {
+        sessionStorage.removeItem(SESSION_KEY);
+        deactivateDashboard();
+        loginGate.hidden = false;
+        loginGate.classList.remove('exiting');
+        setGateState('idle');                  // re-enable inputs
+        pendingTransition = false;
+      }
+
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (pendingTransition) return;
+
+        const u = document.getElementById('username').value.trim();
+        const p = document.getElementById('password').value;
+        const credsValid = u === VALID_CREDS.username && p === VALID_CREDS.password;
+
+        if (!credsValid) {
+          // Cognitive error shake — instantly dismissible feedback
+          loginGate.classList.remove('is-error');
+          void loginGate.offsetWidth;             // reflow → animation restart
+          loginGate.classList.add('is-error');
+          setTimeout(() => loginGate.classList.remove('is-error'), 1200);
+          const hint = loginGate.querySelector('.hint');
+          if (hint && !hint.dataset.errorShown) {
+            hint.dataset.errorShown = '1';
+            hint.innerHTML += ' <span style="color:var(--weak);">Invalid credentials.</span>';
+          }
+          return;
+        }
+
+        // ===========================================================
+        // PHASE 2 — Verification Pulse
+        //   Lock the inputs, swap the button label for a spinner,
+        //   and let the UI breathe for VERIFY_DELAY_MS before the
+        //   actual dissolve + reveal kicks off.
+        // ===========================================================
+        setGateState('verifying');
+
+        // Pre-warm the dashboard into its preparing state so the
+        // mount happens in parallel with the verification delay —
+        // there is zero idle time between "verified" and "revealed".
+        activateDashboard();
+        dashboard.classList.add('preparing');
+
+        setTimeout(() => {
+          signIn();                              // continues Phase 3 + 4
+        }, VERIFY_DELAY_MS);
+      });
+      logoutBtn.addEventListener('click', signOut);
+
+      // ===========================================================
+      // RAIL TOGGLE — hamburger button
+      //   Clicking flips the `#dashboard` between its default
+      //   layout (rail visible) and `.rail-collapsed` (rail hidden).
+      //   The state is persisted in sessionStorage so the user does
+      //   not see the rail flicker on reload.
+      // ===========================================================
+      const railToggle = document.getElementById('railToggle');
+      const RAIL_KEY = 'aspire_rail_collapsed';
+
+      function applyRailState(collapsed) {
+        dashboard.classList.toggle('rail-collapsed', collapsed);
+        if (railToggle) {
+          railToggle.setAttribute('aria-pressed', String(!collapsed));
+          railToggle.setAttribute(
+            'aria-label',
+            collapsed ? 'Show navigation rail' : 'Hide navigation rail'
+          );
+        }
+      }
+      try {
+        applyRailState(sessionStorage.getItem(RAIL_KEY) === '1');
+      } catch (_) {
+        applyRailState(false);
+      }
+      if (railToggle) {
+        railToggle.addEventListener('click', () => {
+          const next = !dashboard.classList.contains('rail-collapsed');
+          applyRailState(next);
+          try { sessionStorage.setItem(RAIL_KEY, next ? '1' : '0'); } catch (_) { }
+        });
+      }
+
+      // Auto-resume on page reload (no Phase 2 needed — credentials were
+      // already accepted in a prior session, kept in sessionStorage).
+      if (isSignedIn()) {
+        // Populate profile cluster (signIn normally does this)
+        if (profileFirst) profileFirst.textContent = PROFILE.first;
+        if (profileLast) profileLast.textContent = PROFILE.last;
+        if (profileRole) profileRole.textContent = PROFILE.role;
+        activateDashboard();
+        dashboard.classList.add('phase2', 'phase3');
+      }
+
+      // ===========================================================
+      // DATA
+      // ===========================================================
+      function loadSubmissions() {
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+        catch (_) { return []; }
+      }
+      function loadInterventions() {
+        try { return JSON.parse(localStorage.getItem(INTERV_KEY) || '[]'); }
+        catch (_) { return []; }
+      }
+      function loadResilience() {
+        try { return JSON.parse(localStorage.getItem(RESILIENCE_KEY) || '[]'); }
+        catch (_) { return []; }
+      }
+
+      let activeFilter = 'all';
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeFilter = btn.dataset.filter;
+          renderTable();
+        });
+      });
+
+      refreshBtn.addEventListener('click', render);
+      clearBtn.addEventListener('click', () => {
+        if (!confirm('Erase ALL captured study data? This cannot be undone.')) return;
+
+        // ---- 1. Purge all three storage keys --------------------
+        // The dashboard reads from three independent localStorage
+        // buckets: submissions, interventions, and resilience.
+        // Clearing only two of them leaves the resilience flow
+        // populated even when the KPI counters above show 0.
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(INTERV_KEY);
+        localStorage.removeItem(RESILIENCE_KEY);
+
+        // ---- 2. Force-reset the in-memory filter state ---------
+        // If the user had a tier filter active (weak / fair / good
+        // / strong) the next render must show the cleared view
+        // regardless of that filter selection.
+        activeFilter = 'all';
+        filterBtns.forEach(b => {
+          if (b.dataset.filter === 'all') b.classList.add('active');
+          else b.classList.remove('active');
+        });
+
+        // ---- 3. Purge the Behavioral Flow DOM tree -------------
+        // Unmount every session row from the flow list so the
+        // dashboard does not ghost the previous dataset's tracks.
+        // The wrapper is bound to an EMPTY array state — the
+        // next renderResilience() call below iterates over
+        // loadResilience() which now returns [].  No cached
+        // session logs can re-render until a brand-new
+        // registration event captures a fresh baseline/adaptation
+        // pair and appends it to the storage bucket.
+        if (resilienceFlow) resilienceFlow.innerHTML = '';
+
+        // ---- 4. Inject the empty-state placeholder --------------
+        // Re-show the `.resilience-empty` block with the
+        // EXACT literal copy mandated by the v2.1 reset spec.
+        // The block is hidden by renderResilience() whenever the
+        // list is non-empty; re-showing it here gives the
+        // researcher a clean slate the moment the data is wiped.
+        if (resilienceEmpty) {
+          resilienceEmpty.hidden = false;
+          // Literal copy from the Dashboard Logic & State spec,
+          // §3 "Behavioural Flow Reset State".  The structural
+          // muted, dashed-border styling is already attached to
+          // `.resilience-empty` via the existing CSS rule, so no
+          // new style work is required here.
+          resilienceEmpty.innerHTML =
+            '<p>No intervention sessions captured yet. ' +
+            'A baseline/adaptation pair is recorded every ' +
+            'time the warning modal fires.</p>';
+        }
+
+        // ---- 5. Reset the counter node so the header pill
+        //         also drops back to 0 immediately, before the
+        //         render() call below re-asserts it. -----------
+        if (resilienceCount) resilienceCount.textContent = '0';
+
+        // ---- 6. Flush the Intervention Outcomes counters -------
+        // The macro aggregator (Proceeded Despite Risk /
+        // Chose to Improve) must immediately display the zeroed
+        // state, BEFORE the cascading render pass.  Setting
+        // both text nodes to the literal "0" guarantees the
+        // researcher sees a neutral dashboard the moment the
+        // data is wiped, even if render() is delayed by a tick.
+        if (intervProceed) intervProceed.textContent = '0';
+        if (intervImprove) intervImprove.textContent = '0';
+
+        // ---- 7. Reset the executive summary KPI cards ----------
+        // Intervention success rate, median hesitation, and the
+        // resilience delta all derive from the now-empty
+        // resilience + intervention buckets.  Force the
+        // text nodes to their neutral "—" placeholders so the
+        // top KPI strip does not ghost the previous dataset's
+        // percentages for a single frame after the wipe.
+        if (statIntervSuccess)    statIntervSuccess.textContent    = '—';
+        if (statMedianHesitation) statMedianHesitation.textContent = '—';
+        if (statDelta)            statDelta.textContent            = '—';
+
+        // ---- 8. Re-run the standard render so every KPI card,
+        //         chart, intervention counter, and the logs table
+        //         all collapse back to their empty state. -------
+        render();
+      });
+      exportBtn.addEventListener('click', exportCSV);
+
+      function exportCSV() {
+        const subs = loadSubmissions();
+        if (!subs.length) { alert('Nothing to export.'); return; }
+        const cols = [
+          'id', 'timestamp', 'firstName', 'lastName', 'email', 'username',
+          'password', 'passwordLength', 'tier', 'score', 'elapsedMs',
+          'keypressCount', 'backspaceCount', 'isCommon'
+        ];
+        const esc = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+        const csv = [cols.join(',')]
+          .concat(subs.map(r => cols.map(c => esc(r[c])).join(',')))
+          .join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `aspire-export-${Date.now()}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      // ===========================================================
+      // RENDER
+      // ===========================================================
+      function render() {
+        const subs = loadSubmissions();
+        renderStats(subs);
+        renderCharts(subs);
+        renderInterventions();
+        renderResilience();
+        renderTable();
+      }
+
+      function renderStats(subs) {
+        statTotal.textContent = subs.length;
+        statLatest.textContent = subs.length
+          ? 'Last entry ' + relativeTime(subs[subs.length - 1].timestamp)
+          : 'No data yet';
+
+        if (subs.length) {
+          const avgMs = subs.reduce((a, s) => a + (s.elapsedMs || 0), 0) / subs.length;
+          const avgBs = subs.reduce((a, s) => a + (s.backspaceCount || 0), 0) / subs.length;
+          statAvgTime.textContent = (avgMs / 1000).toFixed(1);
+          statAvgBack.textContent = avgBs.toFixed(1);
+        } else {
+          statAvgTime.textContent = '—';
+          statAvgBack.textContent = '—';
+        }
+
+        statCommon.textContent = subs.filter(s => s.isCommon).length;
+      }
+
+      function renderCharts(subs) {
+        const counts = { weak: 0, fair: 0, good: 0, strong: 0 };
+        subs.forEach(s => { if (counts[s.tier] != null) counts[s.tier]++; });
+
+        const total = subs.length || 1;
+
+        // Tier bar
+        TIERS.forEach(t => {
+          const slice = document.getElementById('slice' + cap(t));
+          const legend = document.getElementById('legend' + cap(t));
+          const pct = (counts[t] / total) * 100;
+          slice.style.flex = String(counts[t]);
+          slice.textContent = counts[t] ? `${Math.round(pct)}%` : '';
+          legend.textContent = `${counts[t]} — ${cap(t)}`;
+        });
+
+        // Adoption donut
+        const secure = counts.good + counts.strong;
+        const pct = subs.length ? (secure / subs.length) : 0;
+        const circumference = 2 * Math.PI * 64; // 402.12
+        donutFg.setAttribute('stroke-dasharray', String(circumference));
+        donutFg.setAttribute('stroke-dashoffset', String(circumference * (1 - pct)));
+        adoptionPct.textContent = Math.round(pct * 100) + '%';
+        adoptionDetail.innerHTML =
+          `<strong>${secure}</strong> of <strong>${subs.length}</strong> ` +
+          `participants chose a resilient password.`;
+      }
+
+      function renderInterventions() {
+        const list = loadInterventions();
+        intervProceed.textContent = list.filter(i => i.outcome === 'proceeded').length;
+        intervImprove.textContent = list.filter(i => i.outcome === 'improved').length;
+
+        // ----- Executive Summary: Resilience Delta KPIs -----
+        const resilience = loadResilience();
+        const improved = list.filter(i => i.outcome === 'improved').length;
+        const total = list.length;
+
+        if (total > 0) {
+          const pct = (improved / total) * 100;
+          statIntervSuccess.textContent = pct.toFixed(0) + '%';
+        } else {
+          statIntervSuccess.textContent = '—';
+        }
+
+        if (resilience.length) {
+          // Median hesitation (seconds)
+          const sortedMs = resilience
+            .map(r => r.hesitation && r.hesitation.ms || 0)
+            .sort((a, b) => a - b);
+          const mid = Math.floor(sortedMs.length / 2);
+          const medianMs = sortedMs.length % 2 === 0
+            ? (sortedMs[mid - 1] + sortedMs[mid]) / 2
+            : sortedMs[mid];
+          statMedianHesitation.textContent = (medianMs / 1000).toFixed(1);
+
+          // Resilience Delta — average tier-jump across improved sessions
+          const deltas = resilience
+            .filter(r => r.outcome === 'improved')
+            .map(r => (r.adaptation && r.adaptation.tierDelta) || 0);
+          if (deltas.length) {
+            const avg = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+            statDelta.textContent = (avg >= 0 ? '+' : '') + avg.toFixed(2);
+          } else {
+            statDelta.textContent = '0.00';
+          }
+        } else {
+          statMedianHesitation.textContent = '—';
+          statDelta.textContent = '—';
+        }
+      }
+
+      // ===========================================================
+      // RESILIENCE DELTA — Behavioral Flow Renderer
+      //   Each entry shows the participant's full arc:
+      //     Attempt 1 (vulnerable)  ➔  Intervention
+      //                              ➔  Hesitation + corrections
+      //                              ➔  Attempt 2 (adapted)
+      // ===========================================================
+      function renderResilience() {
+        const list = loadResilience()
+          .slice()
+          .reverse();           // newest first
+
+        resilienceCount.textContent = String(list.length);
+
+        if (!list.length) {
+          resilienceFlow.innerHTML = '';
+          resilienceEmpty.hidden = false;
+          return;
+        }
+        resilienceEmpty.hidden = true;
+
+        resilienceFlow.innerHTML = list.map((r, i) => {
+          const adapted = r.outcome === 'improved';
+          const hesSec = ((r.hesitation && r.hesitation.ms || 0) / 1000).toFixed(1);
+          const hesKeys = (r.hesitation && r.hesitation.keypresses) || 0;
+          const hesBacks = (r.hesitation && r.hesitation.backspaces) || 0;
+          const tier = (t) => `<span class="tier-pill ${t}">${t}</span>`;
+          const deltaCls = (r.adaptation.tierDelta || 0) > 0 ? 'positive'
+            : (r.adaptation.tierDelta || 0) < 0 ? 'negative' : 'neutral';
+          const deltaTxt = ((r.adaptation.tierDelta || 0) >= 0 ? '+' : '')
+            + (r.adaptation.tierDelta || 0);
+          const delay = i < 10 ? (i * 70) : 0;          // softer cascade for the heavier rows
+          return `
+          <li class="flow-row ${adapted ? 'adapted' : 'declined'}" ${delay ? `style="animation-delay:${delay}ms"` : ''}>
+            <div class="flow-meta">
+              <span class="flow-time">${formatDate(r.timestamp)}</span>
+              <span class="flow-outcome ${r.outcome}">
+                ${adapted ? '✓ Adapted' : '⚠ Accepted risk'}
+              </span>
+              <button class="details-btn" type="button" aria-expanded="false" aria-controls="details-content-${i}" onclick="openModal(this.closest('.flow-row').querySelector('.details-content'))">View Full Details</button>
+            </div>
+
+            <div id="details-content-${i}" class="details-content hidden">
+              <div class="flow-arc">
+              <div class="flow-stage baseline">
+                <div class="stage-label">Attempt 1 · Baseline</div>
+                <div class="stage-tier">${tier(r.baseline.tier)}</div>
+                <div class="stage-pw pw-mono">${escapeHtml(r.baseline.password || '')}</div>
+                <div class="stage-meta">${r.baseline.passwordLength} chars</div>
+              </div>
+
+              <div class="flow-arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-icon">⚡</div>
+              </div>
+
+              <div class="flow-stage catalyst">
+                <div class="stage-label">Intervention triggered</div>
+                <div class="stage-meta catalyst-summary">${escapeHtml(r.catalyst.summary)}</div>
+                <div class="stage-meta">
+                  <span class="hesitation-pill">⏱ ${hesSec}s</span>
+                  <span class="hesitation-pill">⌨ ${hesKeys} keys</span>
+                  <span class="hesitation-pill">⌫ ${hesBacks} corrections</span>
+                </div>
+              </div>
+
+              <div class="flow-arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-icon">→</div>
+              </div>
+
+              <div class="flow-stage adapted">
+                <div class="stage-label">Attempt 2 · Adaptation</div>
+                <div class="stage-tier">${tier(r.adaptation.tier)}</div>
+                <div class="stage-pw pw-mono">${escapeHtml(r.adaptation.password || '')}</div>
+                <div class="stage-meta">
+                  ${r.adaptation.passwordLength} chars
+                  <span class="delta-tag ${deltaCls}">Δ ${deltaTxt}</span>
+                </div>
+              </div>
+            </div>
+          </li>
+        `;
+        }).join('');
+      }
+
+      function toggleDetails(btn) {
+        // Find the content container that sits right after the button's parent
+        const content = btn.parentNode.nextElementSibling;
+
+        if (!content) return;
+
+        if (content.style.display === 'none' || content.style.display === '') {
+          content.style.display = 'block';
+          btn.textContent = 'Collapse';
+        } else {
+          content.style.display = 'none';
+          btn.textContent = 'View Full Details';
+        }
+      }
+
+      function openModal(contentElem) {
+        const modal = document.getElementById('detailsModal');
+        const modalBody = document.getElementById('modalBody');
+        if (!modal || !modalBody || !contentElem) return;
+        modalBody.innerHTML = contentElem.innerHTML;
+        modal.style.display = 'block';
+      }
+      window.openModal = openModal;
+
+      document.addEventListener('click', (event) => {
+        if (event.target.matches('.close-btn')) {
+          const modal = document.getElementById('detailsModal');
+          if (modal) modal.style.display = 'none';
+        }
+
+        if (event.target.id === 'detailsModal') {
+          event.target.style.display = 'none';
+        }
+      });
+
+      function renderTable() {
+        const subs = loadSubmissions()
+          .filter(s => activeFilter === 'all' || s.tier === activeFilter)
+          .slice()
+          .reverse();
+
+        logsCount.textContent = `${subs.length} ${subs.length === 1 ? 'entry' : 'entries'}`;
+
+        if (!subs.length) {
+          logsBody.innerHTML = '';
+          emptyState.hidden = false;
+          return;
+        }
+        emptyState.hidden = true;
+
+        // Hard cap on the staggered cascade so very large log sets never
+        // produce a perceptible delay.  Beyond this, rows render as a
+        // single block instead of one-by-one.
+        const STAGGER_LIMIT = 30;
+
+        logsBody.innerHTML = subs.map((s, i) => {
+          const delay = i < STAGGER_LIMIT ? (i * 50) : 0;
+          return `
+        <tr ${delay ? `style="animation-delay:${delay}ms"` : ''}>
+          <td>${formatDate(s.timestamp)}</td>
+          <td>${escapeHtml(s.username || '(anon)')}<br>
+              <small style="color:var(--muted)">${escapeHtml(s.email || '')}</small></td>
+          <td><span class="pw-mono pw-cell">${escapeHtml(s.password || '')}</span></td>
+          <td><span class="tier-pill ${s.tier}">${s.tier}</span></td>
+          <td>${s.score != null ? (s.score + 1) + '/99' : '—'}</td>
+          <td>${s.passwordLength}</td>
+          <td>${((s.elapsedMs || 0) / 1000).toFixed(1)}s</td>
+          <td>${s.backspaceCount || 0}</td>
+        </tr>
+      `;
+        }).join('');
+      }
+
+      // ===========================================================
+      // HELPERS
+      // ===========================================================
+      function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+      function escapeHtml(str) {
+        return String(str ?? '')
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+
+      function formatDate(iso) {
+        try {
+          const d = new Date(iso);
+          return d.toLocaleString(undefined, {
+            month: 'short', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+          });
+        } catch (_) { return iso; }
+      }
+
+      function relativeTime(iso) {
+        const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+        if (diff < 60) return `${Math.round(diff)}s ago`;
+        if (diff < 3600) return `${Math.round(diff / 60)}m ago`;
+        if (diff < 86400) return `${Math.round(diff / 3600)}h ago`;
+        return `${Math.round(diff / 86400)}d ago`;
+      }
+
+      // ===========================================================
+      // LIVE UPDATES — refresh when data changes in another tab
+      // ===========================================================
+      window.addEventListener('storage', (e) => {
+        if (e.key === STORAGE_KEY || e.key === INTERV_KEY || e.key === RESILIENCE_KEY) render();
+      });
+
+      // Initial render if already signed in
+      if (isSignedIn()) render();
+    })();
+  </script>
+
+  <!-- The Modal Background -->
+  <div id="detailsModal" class="modal">
+    <!-- Modal Content Box -->
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <div id="modalBody">
+        <!-- Data will be injected here via JavaScript -->
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

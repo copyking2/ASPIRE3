@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="ASPIRE Password Resilience Study — landing hub for the participant simulator and the researcher portal." />
+  <title>ASPIRE — Password Resilience Study</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%235570ff'/><stop offset='1' stop-color='%237689ff'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><text x='32' y='42' text-anchor='middle' font-family='-apple-system,Segoe UI,Roboto,sans-serif' font-weight='800' font-size='34' fill='white'>A</text></svg>" />
+</head>
+
+<body class="has-global-header has-global-footer">
+
+  <!-- ============================================================
+       GLOBAL NAVIGATION HEADER
+       Reused across every ASPIRE page so participants and
+       researchers always know where they are.  The page background
+       is offset by 64px (see .has-global-header in style.css).
+       ============================================================ -->
+  <header class="global-header" role="banner">
+    <a class="gh-brand" href="index.html" aria-label="ASPIRE — back to hub">
+      <span class="logo" aria-hidden="true">A</span>
+      <span class="gh-brand-text">
+        ASPIRE
+        <small>Password Resilience Study</small>
+      </span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="registration.html">ASPIRE</a>
+      <a href="sign.html">Sign In</a>
+      <a href="portal.html">Analytics Portal</a>
+      <a href="records.html" class="active" aria-current="page">Data Records</a>
+    </nav>
+    <div class="nav-actions">
+      <input class="mobile-nav-toggle" id="mobile-nav-toggle-index" type="checkbox" />
+      <label class="mobile-nav-trigger" for="mobile-nav-toggle-index" aria-label="Toggle navigation menu">
+        <span aria-hidden="true"></span>
+      </label>
+      <label class="mobile-nav-backdrop" for="mobile-nav-toggle-index" aria-hidden="true"></label>
+      <nav class="mobile-nav-drawer" aria-label="Primary">
+        <label class="mobile-nav-close" for="mobile-nav-toggle-index" aria-label="Close navigation">×</label>
+        <a href="index.html">Home</a>
+        <a href="registration.html">ASPIRE</a>
+        <a href="sign.html">Sign In</a>
+        <a href="portal.html">Analytics Portal</a>
+        <a href="records.html" class="active" aria-current="page">Data Records</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       ASPIRE — Landing Hub
+       Three-zone composition:
+         §1  Brand + identity header (logo, title, subtitle)
+         §2  Hero card  (entry point to the system)
+         §3  Pathway grid  (two destination cards)
+         §4  Feature ledger (capability summary)
+         §5  Footer with system context
+       Page hierarchy is mirrored from registration.html's card
+       layout so the hub feels like a natural prologue to either
+       destination (registration simulator or research portal).
+       ============================================================ -->
+
+  <main class="hub">
+    <section class="card hub-card" aria-labelledby="hub-title">
+
+      <!-- §1 — Brand -->
+      <div class="brand">
+        <div class="logo" aria-hidden="true">A</div>
+        <span>ASPIRE Study Portal</span>
+      </div>
+
+      <!-- §2 — Hero -->
+      <header class="hub-hero">
+        <h1 id="hub-title">ASPIRE Password Resilience Study</h1>
+        <p class="subtitle">
+          A multi-page research environment that captures how students
+          choose, refine, and persist their account passwords. The
+          system pairs a live participant simulator with a researcher
+          analytics dashboard to track behavioral telemetry in
+          real time.
+        </p>
+
+
+        <ul class="hub-meta" aria-label="Study metadata">
+          <li><span class="hub-meta-k">Mode</span><span class="hub-meta-v">Anonymous · Local-only</span></li>
+          <li><span class="hub-meta-k">Capture</span><span class="hub-meta-v">Entropy, keystrokes, interventions</span>
+          </li>
+          <li><span class="hub-meta-k">Storage</span><span class="hub-meta-v">In-browser (localStorage)</span></li>
+        </ul>
+        <p></p>
+      </header>
+
+      <!-- §3 — Pathway grid: choose your entry -->
+      <section class="hub-pathways" aria-label="Choose an entry point">
+
+        <a class="pathway" href="sign.html" aria-labelledby="path-participant">
+          <div class="pathway-glyph" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="28" height="28">
+              <circle cx="13" cy="13" r="6" fill="none" stroke="currentColor" stroke-width="2" />
+              <path d="M17 17 L23 23" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <h3 id="path-participant">Sign in to your study account</h3>
+          <p class="pathway-desc">
+            Sign up or log in to measure the vulnerability and resilience
+            of your personal password habits. Returning participants can
+            review their individual telemetry, while new accounts are
+            onboarded through the same secure study flow.
+          </p>
+          <span class="pathway-meta">
+            <span class="pathway-pill">Account</span>
+            <span class="pathway-cta">Open sign-in hub →</span>
+          </span>
+        </a>
+
+        <a class="pathway" href="portal.html" aria-labelledby="path-researcher">
+          <div class="pathway-glyph" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="28" height="28">
+              <rect x="4" y="14" width="6" height="14" fill="none" stroke="currentColor" stroke-width="2" />
+              <rect x="13" y="8" width="6" height="20" fill="none" stroke="currentColor" stroke-width="2" />
+              <rect x="22" y="4" width="6" height="24" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </div>
+          <h3 id="path-researcher">Researcher portal</h3>
+          <p class="pathway-desc">
+            Authenticate with your researcher credentials to view
+            the live dashboard: strength distribution, secure
+            adoption rate, intervention outcomes, the Resilience
+            Delta behavioral flow and the submission log.
+          </p>
+          <span class="pathway-meta">
+            <span class="pathway-pill secure">Restricted</span>
+            <span class="pathway-cta">Open portal →</span>
+          </span>
+        </a>
+
+      </section>
+
+      <!-- §4 — Capability ledger -->
+      <section class="hub-features" aria-label="System capabilities">
+        <h2 class="hub-features-title">What the system captures</h2>
+        <ul class="hub-feature-list">
+          <li>
+            <span class="feature-k">100-point scoring matrix</span>
+            <span class="feature-v">Length · diversity · pattern · entropy</span>
+          </li>
+          <li>
+            <span class="feature-k">Real-time telemetry</span>
+            <span class="feature-v">Basic properties · conditional alerts · cyber attack simulation</span>
+          </li>
+          <li>
+            <span class="feature-k">Resilience Delta</span>
+            <span class="feature-v">Baseline → intervention → adaptation per session</span>
+          </li>
+          <li>
+            <span class="feature-k">Hardware-aware crack-time</span>
+            <span class="feature-v">Desktop PC · GPU · GPU farm cluster</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- §5 — Footer -->
+      <p class="footnote hub-foot">
+        Data is stored locally in your browser. No information is
+        transmitted to a server. Open the participant simulator in
+        one tab and the researcher portal in another to generate
+        sample submissions.
+      </p>
+
+    </section>
+  </main>
+
+  <footer class="global-footer" role="contentinfo">
+    <div class="gf-inner">
+      <span class="gf-block gf-left">&copy; 2026 ASPIRE. All rights reserved.</span>
+      <span class="gf-block gf-center">Advanced Student Password Interaction and Resilience Evaluator Academic Research Study</span>
+      <span class="gf-block gf-right">Data collected anonymously for behavioral analysis.</span>
+    </div>
+  </footer>
+
+  <script>
+    // ------------------------------------------------------------
+    // Subtle, preference-aware entrance animation.  Honors
+    // prefers-reduced-motion: when the user has requested less
+    // animation we skip the spring and let the card paint
+    // immediately so the hub stays accessible.
+    // ------------------------------------------------------------
+    (function () {
+      var reduce = window.matchMedia
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var card = document.querySelector('.hub-card');
+      if (!card || reduce) return;
+      // The springIn keyframe is defined in style.css and animates
+      // scale + opacity.  We retrigger it here so the hub card
+      // matches the registration card's opening behaviour.
+      card.style.animation = 'none';
+      // force a reflow so the animation restarts cleanly on reload
+      void card.offsetWidth;
+      card.style.animation = '';
+    })();
+  </script>
+</body>
+
+</html>
